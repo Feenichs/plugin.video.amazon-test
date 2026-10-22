@@ -596,13 +596,15 @@ WINDOW_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
         </control>
 
         <!-- Header -->
+        <!-- pv_logo.png: clearlogo.png scaled to twice the header size (4K), Kodi does not
+             smooth large images when it scales them down -->
         <control type="image">
-            <left>60</left><top>24</top><width>80</width><height>80</height>
-            <aspectratio>keep</aspectratio>
-            <texture>$INFO[Window.Property(icon)]</texture>
+            <left>60</left><top>33</top><width>200</width><height>62</height>
+            <aspectratio align="left">keep</aspectratio>
+            <texture>pv_logo.png</texture>
         </control>
         <control type="list" id="100">
-            <left>200</left><top>28</top><width>1500</width><height>72</height>
+            <left>300</left><top>28</top><width>1400</width><height>72</height>
             <orientation>horizontal</orientation>
             <ondown>100</ondown>
             <scrolltime>150</scrolltime>

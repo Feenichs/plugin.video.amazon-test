@@ -99,7 +99,6 @@ class HomeWindow(xbmcgui.WindowXML):
                 self._start(self._refresh_view)
             return
         self._initialised = True
-        self.setProperty('icon', os.path.join(_g.PLUGIN_PATH, 'icon.png'))
         self.setProperty('view', 'tab')
         self.setProperty('user', self._user_name())
         self._load_root()
