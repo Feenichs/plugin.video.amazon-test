@@ -1160,3 +1160,19 @@ msgstr "PIN gespeichert"
 msgctxt "#30376"
 msgid "PIN removed"
 msgstr "PIN entfernt"
+
+msgctxt "#30377"
+msgid "Purchases in Kodi are protected by a PIN. Please set it now."
+msgstr "Käufe in Kodi sind mit einer PIN geschützt. Bitte lege sie jetzt fest."
+
+msgctxt "#30378"
+msgid "Purchase completed"
+msgstr "Kauf abgeschlossen"
+
+msgctxt "#30379"
+msgid "The offer is outdated. Please open the page again and try once more."
+msgstr "Das Angebot ist veraltet. Bitte öffne die Seite erneut und versuche es noch einmal."
+
+msgctxt "#30380"
+msgid "The purchase could not be completed in Kodi. Please complete it in the browser on %s."
+msgstr "Der Kauf konnte in Kodi nicht abgeschlossen werden. Bitte schließe ihn im Browser auf %s ab."

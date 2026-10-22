@@ -680,7 +680,7 @@ class HomeWindow(xbmcgui.WindowXML):
         elif action == 'trailer':
             self._play(info['asin'], title, streamtype=1, resume=0)
         elif action == 'offers':
-            if purchase.choose_and_purchase(title, info['offers']):
+            if purchase.choose_and_purchase(info, info['offers']):
                 # reload the page, it now offers playback
                 self._cache = {}
                 self._stack[-1]['detail'] = None

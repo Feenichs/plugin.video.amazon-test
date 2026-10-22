@@ -403,9 +403,12 @@ def detail(url):
     title_type = (header.get('titleType') or '').lower()
     title = header.get('parentTitle') or header.get('title') or ''
 
+    page_context = next((s.get('pageContext') for s in states if s.get('pageContext')), {}) or {}
     info = {
         'asin': tid,
         'url': url,
+        'gti': (_merged(states, 'self').get(tid) or {}).get('gti', ''),
+        'sub_page_type': page_context.get('subPageType', ''),
         'title': title,
         'season_title': header.get('title', '') if title_type == 'season' else '',
         'mediatype': 'season' if title_type == 'season' else 'movie',

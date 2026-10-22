@@ -20,15 +20,12 @@
 				</setting>
 			</group>
 			<group id="purchases" label="30366">
-				<!-- hidden until purchases are implemented, see resources/lib/home/purchase.py -->
-				<visible>false</visible>
 				<setting id="purchase_pin_set" type="action" label="30367" help="">
 					<level>0</level>
 					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=purchasePinSet)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
-					<visible>false</visible>
 					<control type="button" format="action"/>
 				</setting>
 				<setting id="purchase_pin_remove" type="action" label="30368" help="">
@@ -37,7 +34,6 @@
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
-					<visible>false</visible>
 					<control type="button" format="action"/>
 				</setting>
 			</group>
