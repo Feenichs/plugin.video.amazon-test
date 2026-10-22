@@ -66,7 +66,7 @@ def _Input(mousex=0, mousey=0, click=0, keys=None, delay='0.2'):
     Log(f'Input command: Mouse(x={mousex}, y={mousey}, click={click}), Keyboard({keys})')
 
 
-def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
+def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
     def _check_output(*popenargs, **kwargs):
         p = subprocess.Popen(stdout=subprocess.PIPE, stderr=subprocess.STDOUT, *popenargs, **kwargs)
         out, err = p.communicate()
@@ -378,7 +378,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
             return [str_list[num][1], str_list[num][2]] if num > -1 else [pid, False]
         return pid, livestate
 
-    def _IStreamPlayback(asin, name, streamtype, isAdult, extern):
+    def _IStreamPlayback(asin, name, streamtype, isAdult, extern, resume=-1):
         from .ages import AgeRestrictions
         bypassproxy = _s.proxy_mpdalter or (streamtype > 1)
         if streamtype == 3:
@@ -484,6 +484,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
         player.cookie = cookie
         player.content = streamtype
         player.extern = extern
+        player.resume_request = resume
         player.resolve(listitem)
 
         starttime = time.time()
@@ -541,7 +542,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
     if _s.playmethod == 2 and _g.platform & _g.OS_ANDROID:
         _AndroidPlayback(asin, streamtype)
     elif _s.playmethod == 3:
-        suc = _IStreamPlayback(asin, name, streamtype, isAdult, extern)
+        suc = _IStreamPlayback(asin, name, streamtype, isAdult, extern, resume)
     elif not _g.platform & _g.OS_ANDROID:
         _ExtPlayback(videoUrl, asin, isAdult)
 
@@ -670,6 +671,8 @@ class _AmazonPlayer(xbmc.Player):
         self.running = False
         self.extern = False
         self.resume = 0
+        # resume position chosen by the caller (TV interface): -1 asks as usual, 0 starts from the beginning
+        self.resume_request = -1
         self.watched = 0
         self.content = 0
         self.rec_added = False
@@ -678,7 +681,9 @@ class _AmazonPlayer(xbmc.Player):
         self.event = 'START'
 
     def resolve(self, li):
-        if self.extern and not self.checkResume():
+        if self.resume_request >= 0:
+            self.resume = self.resume_request
+        elif self.extern and not self.checkResume():
             xbmcplugin.setResolvedUrl(_g.pluginhandle, True, xbmcgui.ListItem())
             xbmc.executebuiltin('Container.Refresh')
             return

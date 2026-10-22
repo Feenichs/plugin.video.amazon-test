@@ -63,10 +63,21 @@ def EntryPoint(argv):
         Log(f'Version: {_g.__version__}')
         Log(f'Unicode filename support: {os.path.supports_unicode_filenames}')
         Log(f"Locale: {_g.userAcceptLanguages.split(',')[0]} / Language: {_s.Language}")
+        # Open the TV interface instead of the classic menu when the add-on is opened in a media window.
+        # Widgets, JSON-RPC requests and the "classic menu" tile of the TV interface still get the menu.
+        if (args.get('classic') != '1' and _g.pluginhandle != -1 and _s.home_window_on_start
+                and xbmc.getCondVisibility('Window.IsMedia')):
+            import xbmcplugin
+            xbmc.executebuiltin(f"RunScript({_g.addon.getAddonInfo('id')},home)")
+            xbmcplugin.endOfDirectory(_g.pluginhandle, succeeded=False, cacheToDisc=False)
+            return
         _g.pv.BrowseRoot()
+    elif mode == 'home':
+        xbmc.executebuiltin(f"RunScript({_g.addon.getAddonInfo('id')},home)")
     elif mode == 'PlayVideo':
         from .playback import PlayVideo
-        PlayVideo(args.get('name', ''), args.get('asin'), args.get('adult', '0'), int(args.get('trailer', '0')), int(args.get('selbitrate', '0')))
+        PlayVideo(args.get('name', ''), args.get('asin'), args.get('adult', '0'), int(args.get('trailer', '0')), int(args.get('selbitrate', '0')),
+                  int(args.get('resume', '-1')))
     elif mode == 'openSettings':
         aid = args.get('url')
         aid = _g.is_addon if aid == 'is' else aid

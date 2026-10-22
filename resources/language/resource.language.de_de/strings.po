@@ -956,3 +956,147 @@ msgstr "Beste verfügbare"
 msgctxt "#30312"
 msgid "Adaptive (inputstream.adaptive)"
 msgstr "Adaptiv (inputstream.adaptive)"
+
+msgctxt "#30320"
+msgid "TV interface"
+msgstr "TV-Oberfläche"
+
+msgctxt "#30321"
+msgid "Open the TV interface on start"
+msgstr "TV-Oberfläche beim Start öffnen"
+
+msgctxt "#30322"
+msgid "Open the TV interface"
+msgstr "TV-Oberfläche öffnen"
+
+msgctxt "#30323"
+msgid "Watchlist"
+msgstr "Merkliste"
+
+msgctxt "#30324"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30326"
+msgid "Highlights"
+msgstr "Highlights"
+
+msgctxt "#30327"
+msgid "Show all"
+msgstr "Alle anzeigen"
+
+msgctxt "#30328"
+msgid "Loading…"
+msgstr "Wird geladen…"
+
+msgctxt "#30329"
+msgid "Nothing to show here"
+msgstr "Hier gibt es nichts anzuzeigen"
+
+msgctxt "#30330"
+msgid "Play"
+msgstr "Abspielen"
+
+msgctxt "#30332"
+msgid "Play from the beginning"
+msgstr "Von vorne abspielen"
+
+msgctxt "#30333"
+msgid "Trailer"
+msgstr "Trailer"
+
+msgctxt "#30334"
+msgid "Add to watchlist"
+msgstr "Zur Merkliste hinzufügen"
+
+msgctxt "#30335"
+msgid "Remove from watchlist"
+msgstr "Von der Merkliste entfernen"
+
+msgctxt "#30338"
+msgid "New search"
+msgstr "Neue Suche"
+
+msgctxt "#30339"
+msgid "Recent searches"
+msgstr "Letzte Suchen"
+
+msgctxt "#30340"
+msgid "Add-on settings"
+msgstr "Addon-Einstellungen"
+
+msgctxt "#30341"
+msgid "Classic menu"
+msgstr "Klassisches Menü"
+
+msgctxt "#30342"
+msgid "Page %s"
+msgstr "Seite %s"
+
+msgctxt "#30343"
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+msgctxt "#30344"
+msgid "Next page"
+msgstr "Nächste Seite"
+
+msgctxt "#30345"
+msgid "Resume from %s"
+msgstr "Fortsetzen ab %s"
+
+msgctxt "#30346"
+msgid "Live TV"
+msgstr "Live-TV"
+
+msgctxt "#30347"
+msgid "Search Prime Video"
+msgstr "Prime Video durchsuchen"
+
+msgctxt "#30348"
+msgid "Reload"
+msgstr "Neu laden"
+
+msgctxt "#30350"
+msgid "Account"
+msgstr "Konto"
+
+msgctxt "#30352"
+msgid "Home"
+msgstr "Startseite"
+
+msgctxt "#30353"
+msgid "Movies"
+msgstr "Filme"
+
+msgctxt "#30354"
+msgid "TV shows"
+msgstr "Serien"
+
+msgctxt "#30355"
+msgid "Age %s"
+msgstr "FSK %s"
+
+msgctxt "#30356"
+msgid "Resume episode %s from %s"
+msgstr "Folge %s ab %s fortsetzen"
+
+msgctxt "#30357"
+msgid "Play episode %s"
+msgstr "Folge %s abspielen"
+
+msgctxt "#30358"
+msgid "Added to the watchlist"
+msgstr "Zur Merkliste hinzugefügt"
+
+msgctxt "#30359"
+msgid "Removed from the watchlist"
+msgstr "Von der Merkliste entfernt"
+
+msgctxt "#30360"
+msgid "Details"
+msgstr "Details"
+
+msgctxt "#30361"
+msgid "Remove from history"
+msgstr "Aus dem Verlauf entfernen"
