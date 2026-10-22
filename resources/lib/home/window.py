@@ -35,9 +35,13 @@ ACTION_MOUSE_LONG_CLICK = 108
 
 NAV_LIST = 100
 ROWS_GROUPLIST = 300
-ROW_LISTS = tuple(range(301, 309))
-ROW_LABELS = tuple(range(401, 409))
-ROW_GROUPS = tuple(range(501, 509))
+# row controls of the skin, NUM_ROWS of .scripts/generate_home_window.py
+NUM_ROWS = 30
+ROW_LISTS = tuple(range(301, 301 + NUM_ROWS))
+ROW_LABELS = tuple(range(401, 401 + NUM_ROWS))
+ROW_GROUPS = tuple(range(501, 501 + NUM_ROWS))
+# load the next rows of a page when the focus is this close to the last row
+MORE_ROWS_AHEAD = 3
 GRID_PANEL = 600
 BUTTON_LIST = 700
 SEASON_LIST = 710
@@ -51,6 +55,8 @@ PLAYBACK_END_DELAY = 3
 WINDOW_PROPERTY = 'amazon_home_window'
 
 TAB_WATCHLIST = 'watchlist'
+TAB_FREE_WITH_ADS = 'freewithads'
+FREE_WITH_ADS_URL = '/gp/video/storefront/home/freetv?jic=36%7CCgtmcmVld2l0aGFkcxIMc3Vic2NyaXB0aW9u'
 TAB_SEARCH = 'search'
 TAB_ACCOUNT = 'account'
 
@@ -74,6 +80,8 @@ class HomeWindow(xbmcgui.WindowXML):
         self._stack = []
         self._row_data = {}
         self._row_offset = 0
+        # page whose following rows are loaded while scrolling down
+        self._more_rows = None
         self._grid = None
         self._detail = None
         self._buttons = []
@@ -212,6 +220,9 @@ class HomeWindow(xbmcgui.WindowXML):
             target = above[-1]
         else:
             below = [row for row in filled if row > index]
+            if len(below) < MORE_ROWS_AHEAD and self._more_rows:
+                generation = self._generation
+                self._start(self._load_more_rows, generation)
             if not below:
                 return
             target = below[0]
@@ -281,6 +292,10 @@ class HomeWindow(xbmcgui.WindowXML):
                     {'id': 'movies', 'title': getString(30353), 'url': vp + '/movie'},
                     {'id': 'tv', 'title': getString(30354), 'url': vp + '/tv'},
                     {'id': 'livetv', 'title': getString(30346), 'url': vp + '/livetv'}]
+        if not _g.UsePrimeVideo:
+            # the page of the "Free with ads" rows, the website has no menu entry for it
+            position = next((i + 1 for i, tab in enumerate(tabs) if 'streamfree' in tab['url']), min(1, len(tabs)))
+            tabs.insert(position, {'id': TAB_FREE_WITH_ADS, 'title': getString(30395), 'url': FREE_WITH_ADS_URL})
         # "My Stuff" like in the app: watchlist and purchases and rentals (video library), split into
         # movies and TV shows with the filters of the website
         tabs.append({'id': TAB_WATCHLIST, 'title': getString(30386), 'url': vp + '/mystuff/watchlist',
@@ -322,12 +337,17 @@ class HomeWindow(xbmcgui.WindowXML):
             nav = self.getControl(NAV_LIST)
             for position, tab in enumerate(self._tabs):
                 nav.getListItem(position).setProperty('active', 'true' if tab['id'] == tab_id else '')
-            self._show_rows(lambda: self._tab_rows(tab_id))
+            self._show_rows(lambda: self._tab_rows(tab_id), self._tab_url(tab_id))
         if focus_rows:
             self._focus_content()
 
     def _tab(self, tab_id):
         return next((tab for tab in self._tabs if tab['id'] == tab_id), None)
+
+    def _tab_url(self, tab_id):
+        """ URL of a tab that shows the rows of one page """
+        tab = self._tab(tab_id)
+        return tab['url'] if tab and 'sections' not in tab else None
 
     def _tab_rows(self, tab_id):
         if tab_id == TAB_SEARCH:
@@ -349,12 +369,13 @@ class HomeWindow(xbmcgui.WindowXML):
         return {'title': title, 'items': items, 'more': more, 'see_more': '' if more else (url if len(items) > data.ROW_MAX_ITEMS else '')}
 
     def _page_rows(self, url, use_cache=True):
+        """ Rows of a page, with the following rows loaded so far """
         now = time.time()
         cached = self._cache.get(url)
         if use_cache and cached and now - cached[0] < CACHE_SECONDS:
             return cached[1]
-        rows = data.page_rows(data.fetch(url), getString(30326))
-        self._cache[url] = (now, rows)
+        rows, next_url = data.rows_page(url, getString(30326))
+        self._cache[url] = (now, rows, next_url)
         return rows
 
     def _search_rows(self):
@@ -377,12 +398,14 @@ class HomeWindow(xbmcgui.WindowXML):
 
     # Rows
 
-    def _show_rows(self, get_rows):
+    def _show_rows(self, get_rows, url=None):
+        """ Show rows, url is the page they come from if it continues with more rows while scrolling """
         with self._lock:
             self._generation += 1
             generation = self._generation
         self._row_data = {}
         self._row_offset = 0
+        self._more_rows = None
         for index, group_id in enumerate(ROW_GROUPS):
             self.getControl(ROW_LISTS[index]).reset()
             self.getControl(group_id).setVisible(False)
@@ -390,25 +413,23 @@ class HomeWindow(xbmcgui.WindowXML):
         self.setProperty('loading', 'true')
 
         def _run():
-            rows = get_rows()[:len(ROW_LISTS)]
+            rows = get_rows()
             if self._stale(generation):
                 return
-            shown = 0
-            for index, row in enumerate(rows):
-                items = list(row['items'][:data.ROW_MAX_ITEMS])
-                if not items:
-                    continue
-                if row.get('more') or row.get('see_more') or len(row['items']) > data.ROW_MAX_ITEMS:
-                    items.append(data.make_item(data.KIND_ALL, getString(30327), row_title=row['title'],
-                                                more=row, thumb=''))
-                with self._lock:
-                    if self._stale(generation):
-                        return
-                    self._fill_row(index, row['title'], items)
-                shown += 1
-                if self._focus_rows:
-                    self._focus_rows = False
-                    self._focus_content()
+            shown = self._add_rows(rows, 0, generation)
+            if shown is None:
+                return
+            if url:
+                self._more_rows = {'url': url, 'end': shown, 'generation': generation, 'loading': False}
+            # back to a tile of a row that was loaded while scrolling, e.g. after playback
+            for _ in range(len(ROW_LISTS)):
+                if not (self._restore and self._restore[0] in ROW_LISTS and ROW_LISTS.index(self._restore[0]) >= self._row_count()):
+                    break
+                if not self._load_more_rows(generation):
+                    if not self._stale(generation):
+                        self._restore = None
+                        self._focus_content()
+                    break
             if not self._stale(generation):
                 self.setProperty('loading', '')
                 if not shown:
@@ -417,6 +438,62 @@ class HomeWindow(xbmcgui.WindowXML):
                         self.setFocusId(NAV_LIST)
 
         self._start(_run)
+
+    def _add_rows(self, rows, start, generation):
+        """ Fill the row controls from start on, returns the number of filled rows, None if the view changed """
+        index = start
+        for row in rows:
+            if index >= len(ROW_LISTS):
+                break
+            items = list(row['items'][:data.ROW_MAX_ITEMS])
+            if not items:
+                continue
+            if row.get('more') or row.get('see_more') or len(row['items']) > data.ROW_MAX_ITEMS:
+                items.append(data.make_item(data.KIND_ALL, getString(30327), row_title=row['title'],
+                                            more=row, thumb=''))
+            with self._lock:
+                if self._stale(generation):
+                    return None
+                self._fill_row(index, row['title'], items)
+            index += 1
+            if self._focus_rows:
+                self._focus_rows = False
+                self._focus_content()
+        return index
+
+    def _row_count(self):
+        return self._more_rows['end'] if self._more_rows else len(self._row_data)
+
+    def _load_more_rows(self, generation):
+        """ Append the next rows of the page, returns False if there are none """
+        with self._lock:
+            more = self._more_rows
+            if self._stale(generation) or not more or more['generation'] != generation or more['loading']:
+                return False
+            cached = self._cache.get(more['url'])
+            next_url = cached[2] if cached and len(cached) > 2 else None
+            if not next_url or more['end'] >= len(ROW_LISTS):
+                self._more_rows = None
+                return False
+            more['loading'] = True
+        self.setProperty('loading', 'true')
+        try:
+            rows, after = data.rows_page(next_url)
+        finally:
+            more['loading'] = False
+            if not self._stale(generation):
+                self.setProperty('loading', '')
+        if self._stale(generation):
+            return False
+        # keep the loaded rows, returning to the page shows them again
+        with self._lock:
+            if self._cache.get(more['url']) is cached:
+                self._cache[more['url']] = (cached[0], cached[1] + rows, after if after != next_url else None)
+        end = self._add_rows(rows, more['end'], generation)
+        if end is None:
+            return False
+        more['end'] = end
+        return True
 
     def _fill_row(self, index, title, items):
         list_id = ROW_LISTS[index]
@@ -455,7 +532,7 @@ class HomeWindow(xbmcgui.WindowXML):
         self.setProperty('page_title', '')
         self._restore = self._tab_focus
         self._focus_rows = not self._restore
-        self._show_rows(lambda: self._tab_rows(self._current_tab))
+        self._show_rows(lambda: self._tab_rows(self._current_tab), self._tab_url(self._current_tab))
 
     def _render(self, view):
         kind = view['type']
@@ -464,7 +541,7 @@ class HomeWindow(xbmcgui.WindowXML):
             self.setProperty('view', 'tab')
             self.setProperty('page_title', view['title'])
             self._focus_rows = not self._restore
-            self._show_rows(lambda: self._page_rows(view['url']))
+            self._show_rows(lambda: self._page_rows(view['url']), view['url'])
         elif kind == 'grid':
             self._detail = None
             self._show_grid(view)
@@ -884,7 +961,7 @@ class HomeWindow(xbmcgui.WindowXML):
                 view['detail'] = None
             self._render(view)
         elif self._current_tab:
-            self._show_rows(lambda: self._tab_rows(self._current_tab))
+            self._show_rows(lambda: self._tab_rows(self._current_tab), self._tab_url(self._current_tab))
 
     # Helpers
 

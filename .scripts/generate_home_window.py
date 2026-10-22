@@ -22,7 +22,7 @@ XML_PATH = os.path.join(SKIN, '1080i', 'script-amazon-home.xml')
 MEDIA = os.path.join(SKIN, 'media')
 
 ADDON = 'plugin.video.amazon-test'
-NUM_ROWS = 8
+NUM_ROWS = 30
 
 # Colours (AARRGGBB), Prime Video: dark blue-grey background and blue accent
 BACKGROUND_RGB = (15, 23, 30)

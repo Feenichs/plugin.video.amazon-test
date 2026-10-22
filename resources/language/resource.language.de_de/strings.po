@@ -1229,3 +1229,7 @@ msgstr "Beliebige Taste schließt das Fenster"
 msgctxt "#30394"
 msgid "Amazon may answer \"We're unable to process the withdrawal\" even if the cancellation succeeds. The title disappears from your purchases a few minutes later."
 msgstr "Amazon meldet eventuell „We're unable to process the withdrawal“, obwohl der Storno klappt. Der Titel verschwindet dann einige Minuten später aus deinen Käufen."
+
+msgctxt "#30395"
+msgid "Free with ads"
+msgstr "Kostenlos mit Werbung"

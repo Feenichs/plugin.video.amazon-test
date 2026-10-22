@@ -258,12 +258,28 @@ def page_rows(data, hero_title=''):
         ctype = (container.get('containerType') or '').lower()
         title = _text(container.get('title')) or container.get('text') or ''
         if 'hero' in ctype:
-            title = hero_title
+            title = hero_title or title
         more = pagination_url(container)
         see_more = (container.get('seeMore') or {}).get('link', {}).get('url') or ''
         rows.append({'title': title, 'items': items, 'more': more, 'see_more': see_more,
                      'grid': ctype == 'grid', 'continue': bool(container.get('isContinueWatching'))})
     return rows
+
+
+def rows_page(url, hero_title=''):
+    """ Rows of a page and the URL of its following rows, the website loads them while scrolling """
+    page = fetch(url)
+    return page_rows(page, hero_title), more_rows_url(page, url)
+
+
+def more_rows_url(data, url):
+    """ URL of the next rows of a landing or collection page, None if there are no more """
+    params = ((data.get('body', data) or {}).get('pagination') or {}).get('queryParameters') or {}
+    if not params.get('serviceToken') or not params.get('pageNumber'):
+        return None
+    query = {key: params[key] for key in ('pageNumber', 'pageSize', 'serviceToken', 'startIndex', 'targetId') if key in params}
+    next_url = url.split('?')[0] + '?' + urlencode(query)
+    return next_url if next_url != url else None
 
 
 def grid_page(url, postdata=None):
