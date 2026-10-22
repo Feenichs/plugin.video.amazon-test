@@ -608,6 +608,8 @@ class HomeWindow(xbmcgui.WindowXML):
             buttons.append(('offers', getString(30362)))
         if info.get('trailer'):
             buttons.append(('trailer', getString(30333)))
+        if info.get('refund'):
+            buttons.append(('refund', getString(30381)))
         if info.get('watchlist'):
             buttons.append(('watchlist', getString(30335 if info.get('in_watchlist') else 30334)))
         self._buttons = [b[0] for b in buttons]
@@ -679,8 +681,9 @@ class HomeWindow(xbmcgui.WindowXML):
             self._play(episode['asin'], episode['label'], resume=episode['resume'])
         elif action == 'trailer':
             self._play(info['asin'], title, streamtype=1, resume=0)
-        elif action == 'offers':
-            if purchase.choose_and_purchase(info, info['offers']):
+        elif action in ('offers', 'refund'):
+            done = purchase.choose_and_purchase(info, info['offers']) if action == 'offers' else purchase.cancel_purchase(info)
+            if done:
                 # reload the page, it now offers playback
                 self._cache = {}
                 self._stack[-1]['detail'] = None

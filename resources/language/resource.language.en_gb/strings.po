@@ -1187,3 +1187,23 @@ msgstr ""
 msgctxt "#30380"
 msgid "The purchase could not be completed in Kodi. Please complete it in the browser on %s."
 msgstr ""
+
+msgctxt "#30381"
+msgid "Cancel purchase"
+msgstr ""
+
+msgctxt "#30382"
+msgid "Cancellation completed"
+msgstr ""
+
+msgctxt "#30383"
+msgid "Choose the order"
+msgstr ""
+
+msgctxt "#30384"
+msgid "Reason for the cancellation"
+msgstr ""
+
+msgctxt "#30385"
+msgid "%s[CR][CR]On this Amazon store purchases are cancelled in the returns assistant of the website. Open this address in a browser:[CR][CR]%s"
+msgstr ""

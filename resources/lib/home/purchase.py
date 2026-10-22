@@ -42,7 +42,8 @@ LAYOUT_CONFIRMATION = 'confirmationdialog'
 LAYOUT_PIN = 'pindialog'
 LAYOUT_NOTIFICATION = 'notificationdialog'
 LAYOUT_RESOLUTION = 'resolutionsupport'
-CALLBACKS_SUCCESS = ('refreshAfterDone',)
+LAYOUT_REFUND = 'refundconfirmationdialog'
+CALLBACKS_SUCCESS = ('refreshAfterDone', 'callbackRefundSuccess')
 CALLBACKS_CANCEL = ('callbackCancel', 'resetAfterCancel')
 CALLBACK_CSRF = 'callbackCSRF'
 
@@ -127,6 +128,33 @@ def choose_and_purchase(info, offers):
     return result == RESULT_PURCHASED
 
 
+def cancel_purchase(info):
+    """ Cancel a purchase of the title, True if it was cancelled """
+    orders = info.get('refund') or []
+    if not orders:
+        return False
+    dialog = xbmcgui.Dialog()
+    order = orders[0]
+    if len(orders) > 1:
+        choice = dialog.select(getString(30383), [o.get('description') or o.get('orderId', '') for o in orders])
+        if choice < 0:
+            return False
+        order = orders[choice]
+    if order.get('csrfToken') and order.get('asin'):
+        result = Workflow(info, refund_order=order).run()
+        if result == RESULT_PURCHASED:
+            dialog.notification(_g.__plugin__, getString(30382), time=3000, sound=False)
+        return result == RESULT_PURCHASED
+    # classic Amazon stores cancel in the returns assistant of the website
+    link = order.get('singleRefundLink')
+    if link:
+        link = FQify(link) + '&return_to=/dp/' + info['asin']
+        dialog.textviewer(getString(30381), getString(30385) % (order.get('description', ''), link))
+    else:
+        dialog.ok(getString(30381), getString(30380) % _site())
+    return False
+
+
 def _site():
     return _g.BaseUrl.replace('https://', '').replace('http://', '')
 
@@ -143,7 +171,23 @@ def _plain(text):
 class Workflow:
     """ Purchase workflow of one offer, see the module description """
 
-    def __init__(self, info, offer):
+    def __init__(self, info, offer=None, refund_order=None):
+        self._title = info['title']
+        endpoint = FQify(info['url'].split('?')[0])
+        if refund_order:
+            # the website sends ASINs as asin and other title ids as globalTitleIdentifier
+            title_id = refund_order['asin']
+            is_asin = re.match(r'^[A-Z0-9]{10}$', title_id) is not None
+            self._workflow_type = 'Refund'
+            self._client_data = {
+                'asin': title_id if is_asin else None,
+                'csrfToken': refund_order['csrfToken'],
+                'globalTitleIdentifier': None if is_asin else title_id,
+                'serviceOverrides': None,
+                'currentEndpoint': endpoint,
+            }
+            return
+        self._workflow_type = 'Commerce-TVOD'
         self._client_data = {
             'csrfToken': offer['csrf_workflow'],
             'offerToken': offer['offer_token'],
@@ -156,18 +200,17 @@ class Workflow:
             'globalTitleIdentifier': info.get('gti') or None,
             'deviceTypeId': WEB_DEVICE_TYPE,
             'serviceOverrides': None,
-            'currentEndpoint': FQify(info['url'].split('?')[0]),
+            'currentEndpoint': endpoint,
         }
-        self._title = info['title']
 
     def _request(self, step=None, init=False):
         # the action and its data (e.g. the PIN) are merged into the client data, like the website does
         client_data = {'action': step['action'], **(step.get('clientData') or {})} if step else {}
         client_data.update(self._client_data)
         client_data['dialogIngress'] = True
-        body = {'clientData': client_data, 'pageType': 'Detail', 'workflowType': 'Commerce-TVOD',
+        body = {'clientData': client_data, 'pageType': 'Detail', 'workflowType': self._workflow_type,
                 'initRequest': init, 'refererURI': ''}
-        Log(f"[Purchase] Workflow request: {'start' if init else step.get('action')}", Log.DEBUG)
+        Log(f"[Purchase] {self._workflow_type} request: {'start' if init else step.get('action')}", Log.DEBUG)
         response = getURL(FQify('/gp/video/acquisition/workflow/actions'), useCookie=True, rjson=False, silent=True,
                           postdata=json.dumps(body),
                           headers={'Content-Type': 'application/json; charset=UTF-8', 'Accept': 'application/json',
@@ -242,6 +285,28 @@ class Workflow:
                             yeslabel=_plain(view.get('submitButtonText'))):
                 return {'action': template['primaryAction']}
             return {'action': CANCEL_ACTION}
+
+        if layout == LAYOUT_REFUND:
+            items = view.get('refundItems') or []
+            reasons = view.get('cancellationReasons') or []
+            if not items or not reasons:
+                return None
+            item = items[0]
+            if len(items) > 1:
+                choice = dialog.select(_plain(view.get('refundItemsKey')) or getString(30383), [i.get('formatString', '') for i in items])
+                if choice < 0:
+                    return {'action': template.get('cancelAction') or CANCEL_ACTION}
+                item = items[choice]
+            choice = dialog.select(_plain(view.get('cancellationReasonsKey')) or getString(30384),
+                                   [r.get('cancellationTitle', '') for r in reasons])
+            if choice < 0:
+                return {'action': template.get('cancelAction') or CANCEL_ACTION}
+            text = [view.get('bodyContent'), f"{view.get('refundAmountKey', '')} {item.get('refundAmount', '')}".strip()]
+            if not dialog.yesno(_plain(view.get('titleText')) or getString(30381), '[CR]'.join(_plain(t) for t in text if t),
+                                yeslabel=_plain(view.get('submitButtonText')) or getString(30381), nolabel=getString(222)):
+                return {'action': template.get('cancelAction') or CANCEL_ACTION}
+            return {'action': template['currentRefundAction'],
+                    'clientData': {'returnReason': reasons[choice]['cancellationAction'], 'orderId': item.get('orderNumber')}}
 
         if layout == LAYOUT_NOTIFICATION:
             secondary = template.get('secondaryAction')

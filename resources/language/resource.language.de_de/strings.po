@@ -1176,3 +1176,23 @@ msgstr "Das Angebot ist veraltet. Bitte öffne die Seite erneut und versuche es 
 msgctxt "#30380"
 msgid "The purchase could not be completed in Kodi. Please complete it in the browser on %s."
 msgstr "Der Kauf konnte in Kodi nicht abgeschlossen werden. Bitte schließe ihn im Browser auf %s ab."
+
+msgctxt "#30381"
+msgid "Cancel purchase"
+msgstr "Kauf stornieren"
+
+msgctxt "#30382"
+msgid "Cancellation completed"
+msgstr "Stornierung abgeschlossen"
+
+msgctxt "#30383"
+msgid "Choose the order"
+msgstr "Bestellung auswählen"
+
+msgctxt "#30384"
+msgid "Reason for the cancellation"
+msgstr "Grund für die Stornierung"
+
+msgctxt "#30385"
+msgid "%s[CR][CR]On this Amazon store purchases are cancelled in the returns assistant of the website. Open this address in a browser:[CR][CR]%s"
+msgstr "%s[CR][CR]In diesem Amazon-Shop werden Käufe im Rückgabe-Assistenten der Website storniert. Öffne diese Adresse im Browser:[CR][CR]%s"

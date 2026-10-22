@@ -428,6 +428,8 @@ def detail(url):
         'feature': _play_info(feature),
         'trailer': bool(trailer),
         'offers': [] if entitled else _offers(actions.get(tid)),
+        # purchases Amazon allows to cancel, the website only shows its cancel link if there are any
+        'refund': (_merged(states, 'refund', 'fragments').get(tid) or {}).get('refundableOrders') or [],
         'watchlist': watchlist.get('endpoint'),
         'in_watchlist': (watchlist.get('tag') or '').lower() == 'remove',
         'seasons': [],
