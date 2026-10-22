@@ -1211,3 +1211,19 @@ msgstr ""
 msgctxt "#30386"
 msgid "My Stuff"
 msgstr ""
+
+msgctxt "#30387"
+msgid "Watchlist: Movies"
+msgstr ""
+
+msgctxt "#30388"
+msgid "Watchlist: TV shows"
+msgstr ""
+
+msgctxt "#30389"
+msgid "Purchases and rentals: Movies"
+msgstr ""
+
+msgctxt "#30390"
+msgid "Purchases and rentals: TV shows"
+msgstr ""

@@ -1200,3 +1200,19 @@ msgstr "%s[CR][CR]In diesem Amazon-Shop werden Käufe im Rückgabe-Assistenten d
 msgctxt "#30386"
 msgid "My Stuff"
 msgstr "Mein Bereich"
+
+msgctxt "#30387"
+msgid "Watchlist: Movies"
+msgstr "Merkliste: Filme"
+
+msgctxt "#30388"
+msgid "Watchlist: TV shows"
+msgstr "Merkliste: Serien"
+
+msgctxt "#30389"
+msgid "Purchases and rentals: Movies"
+msgstr "Käufe und Leihen: Filme"
+
+msgctxt "#30390"
+msgid "Purchases and rentals: TV shows"
+msgstr "Käufe und Leihen: Serien"

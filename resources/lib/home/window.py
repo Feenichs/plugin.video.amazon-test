@@ -282,9 +282,13 @@ class HomeWindow(xbmcgui.WindowXML):
                     {'id': 'movies', 'title': getString(30353), 'url': vp + '/movie'},
                     {'id': 'tv', 'title': getString(30354), 'url': vp + '/tv'},
                     {'id': 'livetv', 'title': getString(30346), 'url': vp + '/livetv'}]
-        # "My Stuff" like in the app: the watchlist and the purchases and rentals (video library)
+        # "My Stuff" like in the app: watchlist and purchases and rentals (video library), split into
+        # movies and TV shows with the filters of the website
         tabs.append({'id': TAB_WATCHLIST, 'title': getString(30386), 'url': vp + '/mystuff/watchlist',
-                     'urls': (vp + '/mystuff/watchlist', vp + '/mystuff/library')})
+                     'sections': [(vp + '/mystuff/watchlist/movie/', getString(30387)),
+                                  (vp + '/mystuff/watchlist/tv/', getString(30388)),
+                                  (vp + '/mystuff/library/movie/', getString(30389)),
+                                  (vp + '/mystuff/library/tv/', getString(30390))]})
         tabs.append({'id': TAB_SEARCH, 'title': getString(30324), 'url': None})
         tabs.append({'id': TAB_ACCOUNT, 'title': getString(30350), 'url': None})
         return tabs
@@ -334,7 +338,16 @@ class HomeWindow(xbmcgui.WindowXML):
         tab = self._tab(tab_id)
         if not tab:
             return []
-        return [row for url in tab.get('urls', (tab['url'],)) for row in self._page_rows(url)]
+        if 'sections' in tab:
+            return [self._section_row(url, title) for url, title in tab['sections']]
+        return self._page_rows(tab['url'])
+
+    def _section_row(self, url, title):
+        """ One row with our own title from all titles of a page, e.g. the movies of the watchlist """
+        rows = self._page_rows(url)
+        items = [item for row in rows for item in row['items']]
+        more = next((row['more'] for row in rows if row.get('more')), None)
+        return {'title': title, 'items': items, 'more': more, 'see_more': '' if more else (url if len(items) > data.ROW_MAX_ITEMS else '')}
 
     def _page_rows(self, url, use_cache=True):
         now = time.time()
