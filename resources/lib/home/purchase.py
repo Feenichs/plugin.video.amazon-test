@@ -18,7 +18,6 @@ import hashlib
 import json
 import os
 import re
-from urllib.parse import urlencode
 
 import xbmcgui
 
@@ -142,12 +141,11 @@ def cancel_purchase(info):
             return False
         order = orders[choice]
     if order.get('singleRefundLink') and not _g.UsePrimeVideo:
-        # classic Amazon stores (amazon.de, ...) cancel in the returns assistant like the website,
-        # the purchase workflow rejects their refunds ("unable to process the withdrawal")
-        done = ReturnsAssistant(info, order).run()
-        if done:
-            dialog.notification(_g.__plugin__, getString(30382), time=3000, sound=False)
-        return done
+        # Classic Amazon stores (amazon.de, ...) cancel in the returns assistant of the website. Amazon
+        # refused every withdrawal sent with the add-on's login, and failed attempts may block the
+        # withdrawal of the order, so the page is opened on the phone with a QR code instead.
+        _show_refund_link(info, order)
+        return False
     if order.get('csrfToken') and order.get('asin'):
         result = Workflow(info, refund_order=order).run()
         if result == RESULT_PURCHASED:
@@ -155,17 +153,53 @@ def cancel_purchase(info):
         elif result == RESULT_FAILED and order.get('singleRefundLink'):
             _show_refund_link(info, order)
         return result == RESULT_PURCHASED
-    # classic Amazon stores cancel in the returns assistant of the website
-    if order.get('singleRefundLink'):
-        _show_refund_link(info, order)
-    else:
-        dialog.ok(getString(30381), getString(30380) % _site())
+    dialog.ok(getString(30381), getString(30380) % _site())
     return False
 
 
 def _show_refund_link(info, order):
-    link = FQify(order['singleRefundLink']) + '&return_to=/dp/' + info['asin']
-    xbmcgui.Dialog().textviewer(getString(30381), getString(30385) % (order.get('description', ''), link))
+    """ Show a QR code with the cancellation page of the order """
+    url = FQify(order['singleRefundLink'])
+    try:
+        path = _qr_image(url, order.get('orderId') or info['asin'])
+    except Exception as e:
+        Log(f'[Purchase] QR code failed: {e}', Log.ERROR)
+        path = None
+    if not path:
+        xbmcgui.Dialog().textviewer(getString(30381), getString(30385) % (order.get('description', ''), url))
+        return
+    QRDialog(getString(30381), path, '[CR][CR]'.join(x for x in (
+        getString(30392), f"[B]{info['title']}[/B][CR]{order.get('description', '')}", getString(30394)) if x)).doModal()
+
+
+def _qr_image(url, key):
+    """ PNG of a QR code in Kodi's temp folder, the file name changes with the content (texture cache) """
+    from ..deps import segno
+    from xbmcvfs import translatePath
+    name = 'amazon_refund_' + hashlib.sha1((key + url).encode('utf-8')).hexdigest()[:16] + '.png'
+    path = os.path.join(translatePath('special://temp/'), name)
+    if not os.path.exists(path):
+        segno.make(url, error='m', micro=False).save(path, kind='png', scale=10, border=4, dark='#000000', light='#ffffff')
+    return path
+
+
+class QRDialog(xbmcgui.WindowDialog):
+    """ Full screen dialog with a QR code and a text, any key closes it """
+
+    def __init__(self, title, image, text):
+        super(QRDialog, self).__init__()
+        media = os.path.join(_g.PLUGIN_PATH, 'resources', 'skins', 'default', 'media')
+        # coordinates of a WindowDialog are based on 1280x720
+        self.addControl(xbmcgui.ControlImage(0, 0, 1280, 720, os.path.join(media, 'pv_white.png'), colorDiffuse='0xF20F171E'))
+        self.addControl(xbmcgui.ControlImage(150, 150, 420, 420, image, aspectRatio=2))
+        self.addControl(xbmcgui.ControlLabel(640, 150, 560, 50, title, font='font30_title', textColor='0xFFFFFFFF'))
+        box = xbmcgui.ControlTextBox(640, 215, 520, 300, font='font13', textColor='0xFFCCD6DD')
+        self.addControl(box)
+        box.setText(text)
+        self.addControl(xbmcgui.ControlLabel(640, 530, 520, 40, getString(30393), font='font12', textColor='0xFF8197A4'))
+
+    def onAction(self, action):
+        self.close()
 
 
 def _site():
@@ -341,100 +375,3 @@ class Workflow:
         Log(f'[Purchase] {self._workflow_type} failed: {title!r} {message!r}', Log.ERROR)
         xbmcgui.Dialog().ok(_plain(title) or self._title, _plain(message) or getString(30380) % _site())
         return RESULT_FAILED
-
-
-class ReturnsAssistant:
-    """
-    Returns assistant of the website (/digital/returns/), used by classic Amazon stores to cancel
-    video purchases. The page "Withdraw from Order" shows the refund summary and a GET form
-    (returnForm, action "?") with the reason (select answerId) and hidden session fields
-    (dtsSessionId, stepId, appAction=stepAction, appActionToken). Submitting it with a reason
-    withdraws the order, the following page shows the result.
-    """
-    FORM_ID = 'returnForm'
-    PLACEHOLDER = 'cantilever-choose-a-response'
-    SKIP_TEXTS = ('Skip to', 'Keyboard shortcuts')
-
-    def __init__(self, info, order):
-        self._title = info['title']
-        self._url = FQify(order['singleRefundLink'])
-
-    @staticmethod
-    def _get(url):
-        return getURL(url, useCookie=True, rjson=False, silent=True,
-                      headers={'Accept': 'text/html,application/xhtml+xml', 'Referer': _g.BaseUrl + '/gp/css/order-history'})
-
-    @classmethod
-    def _main_text(cls, soup, node=None):
-        """ Text of the main content: the block of the first real heading """
-        if node is None:
-            heading = next((h for h in soup.find_all(['h1', 'h2']) if h.get_text(strip=True) not in cls.SKIP_TEXTS), None)
-            if heading is None:
-                return ''
-            node = heading
-            for _ in range(6):
-                if node.parent is None or len(node.parent.get_text(strip=True)) > 3000:
-                    break
-                node = node.parent
-        lines = [' '.join(t.split()) for t in node.get_text('\n', strip=True).split('\n')]
-        return '[CR]'.join(line for line in lines if line and line not in cls.SKIP_TEXTS)
-
-    @classmethod
-    def _parse(cls, page, url):
-        """ The withdrawal form (reasons, submit URL builder, summary) or None, and the page text """
-        from bs4 import BeautifulSoup
-        from urllib.parse import urljoin
-        soup = BeautifulSoup(page or '', 'html.parser')
-        form = soup.find('form', id=cls.FORM_ID)
-        if form is None:
-            return None, cls._main_text(soup)
-        select = form.find('select', attrs={'name': 'answerId'})
-        reasons = [(o.get('value'), o.get_text(strip=True)) for o in (select.find_all('option') if select else [])
-                   if o.get('value') and o.get('value') != cls.PLACEHOLDER]
-        hidden = {i.get('name'): i.get('value', '') for i in form.find_all('input', attrs={'type': 'hidden'}) if i.get('name')}
-        action = urljoin(url, form.get('action') or '?').split('?')[0]
-
-        def submit_url(answer):
-            return action + '?' + urlencode(dict({'answerId': answer}, **hidden))
-
-        # summary: the texts of the page block that contains the form, without the reason list
-        node = form
-        for _ in range(8):
-            if node.parent is None or node.parent.find(['h1', 'h2'], string=lambda t: t and t.strip() not in cls.SKIP_TEXTS):
-                node = node.parent or node
-                break
-            node = node.parent
-        reason_texts = {text for _, text in reasons} | {'Choose a response'}
-        summary = '[CR]'.join(line for line in cls._main_text(soup, node).split('[CR]')
-                              if line not in reason_texts and not re.match(r'^A\d{5,}[A-Z0-9]+$', line))
-        return {'reasons': reasons, 'submit_url': submit_url, 'summary': summary}, cls._main_text(soup)
-
-    def run(self):
-        dialog = xbmcgui.Dialog()
-        page = self._get(self._url)
-        form, text = self._parse(page, self._url)
-        Log(f'[Purchase] Returns assistant: form {"found" if form else "missing"}, '
-            f'{len(form["reasons"]) if form else 0} reasons, text {text[:120]!r}')
-        if not form:
-            dialog.ok(self._title, text or getString(30380) % _site())
-            return False
-        if not form['reasons']:
-            return self._fail()
-        choice = dialog.select(getString(30384), [label for _, label in form['reasons']])
-        if choice < 0:
-            return False
-        answer, label = form['reasons'][choice]
-        if not dialog.yesno(getString(30381), getString(30391) % (form['summary'], label)):
-            return False
-        Log(f'[Purchase] Returns assistant answer: {answer}')
-        result = self._get(form['submit_url'](answer))
-        form_again, text = self._parse(result, self._url)
-        Log(f'[Purchase] Returns assistant result: form {"shown again" if form_again else "gone"}, text {text[:200]!r}')
-        if not result or form_again:
-            return self._fail()
-        dialog.textviewer(self._title, text or getString(30382))
-        return True
-
-    def _fail(self):
-        xbmcgui.Dialog().ok(self._title, getString(30380) % _site())
-        return False
