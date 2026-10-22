@@ -346,12 +346,14 @@ class Workflow:
 class ReturnsAssistant:
     """
     Returns assistant of the website (/digital/returns/), used by classic Amazon stores to cancel
-    video purchases. Its pages are rendered on the server: every answer (e.g. the reason
-    "accidental purchase") is a link with appAction=stepAction, the following page shows the
-    next question or the result. The answers are offered in Kodi, each one is confirmed before
-    it is sent.
+    video purchases. The page "Withdraw from Order" shows the refund summary and a GET form
+    (returnForm, action "?") with the reason (select answerId) and hidden session fields
+    (dtsSessionId, stepId, appAction=stepAction, appActionToken). Submitting it with a reason
+    withdraws the order, the following page shows the result.
     """
-    MAX_STEPS = 5
+    FORM_ID = 'returnForm'
+    PLACEHOLDER = 'cantilever-choose-a-response'
+    SKIP_TEXTS = ('Skip to', 'Keyboard shortcuts')
 
     def __init__(self, info, order):
         self._title = info['title']
@@ -362,56 +364,77 @@ class ReturnsAssistant:
         return getURL(url, useCookie=True, rjson=False, silent=True,
                       headers={'Accept': 'text/html,application/xhtml+xml', 'Referer': _g.BaseUrl + '/gp/css/order-history'})
 
-    @staticmethod
-    def _parse(page):
-        """ Answers (label, url) and the main text of an assistant page """
+    @classmethod
+    def _main_text(cls, soup, node=None):
+        """ Text of the main content: the block of the first real heading """
+        if node is None:
+            heading = next((h for h in soup.find_all(['h1', 'h2']) if h.get_text(strip=True) not in cls.SKIP_TEXTS), None)
+            if heading is None:
+                return ''
+            node = heading
+            for _ in range(6):
+                if node.parent is None or len(node.parent.get_text(strip=True)) > 3000:
+                    break
+                node = node.parent
+        lines = [' '.join(t.split()) for t in node.get_text('\n', strip=True).split('\n')]
+        return '[CR]'.join(line for line in lines if line and line not in cls.SKIP_TEXTS)
+
+    @classmethod
+    def _parse(cls, page, url):
+        """ The withdrawal form (reasons, submit URL builder, summary) or None, and the page text """
         from bs4 import BeautifulSoup
+        from urllib.parse import urljoin
         soup = BeautifulSoup(page or '', 'html.parser')
-        answers = []
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            label = ' '.join(link.get_text(' ', strip=True).split())
-            if 'appAction=stepAction' in href and label and all(a[1] != href for a in answers):
-                answers.append((label, FQify(href.replace('&amp;', '&'))))
-        for form in soup.find_all('form'):
-            action = form.get('action') or ''
-            fields = {i.get('name'): i.get('value', '') for i in form.find_all('input') if i.get('name')}
-            if 'stepAction' in action + ' '.join(fields.values()) and (form.get('method') or 'get').lower() == 'get':
-                button = form.find(['button', 'input'], attrs={'type': 'submit'})
-                label = button.get_text(strip=True) if button and button.name == 'button' else (button.get('value') if button else '')
-                if label:
-                    query = urlencode(fields)
-                    answers.append((label, FQify(action or '/-/en/digital/returns/') + ('&' if '?' in action else '?') + query))
-        texts = [' '.join(t.get_text(' ', strip=True).split()) for t in soup.find_all(['h1', 'h2', 'h3', 'h4'])]
-        alerts = [' '.join(t.get_text(' ', strip=True).split()) for t in soup.select('.a-alert-content, [role=alert]')]
-        text = '[CR]'.join(t for t in texts + alerts if t)
-        return answers, text
+        form = soup.find('form', id=cls.FORM_ID)
+        if form is None:
+            return None, cls._main_text(soup)
+        select = form.find('select', attrs={'name': 'answerId'})
+        reasons = [(o.get('value'), o.get_text(strip=True)) for o in (select.find_all('option') if select else [])
+                   if o.get('value') and o.get('value') != cls.PLACEHOLDER]
+        hidden = {i.get('name'): i.get('value', '') for i in form.find_all('input', attrs={'type': 'hidden'}) if i.get('name')}
+        action = urljoin(url, form.get('action') or '?').split('?')[0]
+
+        def submit_url(answer):
+            return action + '?' + urlencode(dict({'answerId': answer}, **hidden))
+
+        # summary: the texts of the page block that contains the form, without the reason list
+        node = form
+        for _ in range(8):
+            if node.parent is None or node.parent.find(['h1', 'h2'], string=lambda t: t and t.strip() not in cls.SKIP_TEXTS):
+                node = node.parent or node
+                break
+            node = node.parent
+        reason_texts = {text for _, text in reasons} | {'Choose a response'}
+        summary = '[CR]'.join(line for line in cls._main_text(soup, node).split('[CR]')
+                              if line not in reason_texts and not re.match(r'^A\d{5,}[A-Z0-9]+$', line))
+        return {'reasons': reasons, 'submit_url': submit_url, 'summary': summary}, cls._main_text(soup)
 
     def run(self):
         dialog = xbmcgui.Dialog()
         page = self._get(self._url)
-        for _ in range(self.MAX_STEPS):
-            answers, text = self._parse(page)
-            Log(f'[Purchase] Returns assistant page: {len(answers)} answers, text {text[:200]!r}')
-            if not answers:
-                # the result page: show Amazon's message
-                dialog.ok(self._title, text or getString(30380) % _site())
-                return bool(text)
-            labels = [label for label, _ in answers]
-            choice = 0 if len(answers) == 1 else dialog.select(text.split('[CR]')[0] or getString(30384), labels)
-            if choice < 0:
-                return False
-            label, url = answers[choice]
-            if not dialog.yesno(getString(30381), getString(30391) % (self._title, label)):
-                return False
-            answer = re.search(r'answerId=([^&]+)', url)
-            Log(f"[Purchase] Returns assistant answer: {answer.group(1) if answer else label!r}")
-            page = self._get(url)
-            if not page:
-                return self._fail()
-        return self._fail()
+        form, text = self._parse(page, self._url)
+        Log(f'[Purchase] Returns assistant: form {"found" if form else "missing"}, '
+            f'{len(form["reasons"]) if form else 0} reasons, text {text[:120]!r}')
+        if not form:
+            dialog.ok(self._title, text or getString(30380) % _site())
+            return False
+        if not form['reasons']:
+            return self._fail()
+        choice = dialog.select(getString(30384), [label for _, label in form['reasons']])
+        if choice < 0:
+            return False
+        answer, label = form['reasons'][choice]
+        if not dialog.yesno(getString(30381), getString(30391) % (form['summary'], label)):
+            return False
+        Log(f'[Purchase] Returns assistant answer: {answer}')
+        result = self._get(form['submit_url'](answer))
+        form_again, text = self._parse(result, self._url)
+        Log(f'[Purchase] Returns assistant result: form {"shown again" if form_again else "gone"}, text {text[:200]!r}')
+        if not result or form_again:
+            return self._fail()
+        dialog.textviewer(self._title, text or getString(30382))
+        return True
 
     def _fail(self):
         xbmcgui.Dialog().ok(self._title, getString(30380) % _site())
         return False
-
