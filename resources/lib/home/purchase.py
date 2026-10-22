@@ -18,6 +18,7 @@ import hashlib
 import json
 import os
 import re
+from urllib.parse import urlencode
 
 import xbmcgui
 
@@ -140,6 +141,13 @@ def cancel_purchase(info):
         if choice < 0:
             return False
         order = orders[choice]
+    if order.get('singleRefundLink') and not _g.UsePrimeVideo:
+        # classic Amazon stores (amazon.de, ...) cancel in the returns assistant like the website,
+        # the purchase workflow rejects their refunds ("unable to process the withdrawal")
+        done = ReturnsAssistant(info, order).run()
+        if done:
+            dialog.notification(_g.__plugin__, getString(30382), time=3000, sound=False)
+        return done
     if order.get('csrfToken') and order.get('asin'):
         result = Workflow(info, refund_order=order).run()
         if result == RESULT_PURCHASED:
@@ -333,3 +341,77 @@ class Workflow:
         Log(f'[Purchase] {self._workflow_type} failed: {title!r} {message!r}', Log.ERROR)
         xbmcgui.Dialog().ok(_plain(title) or self._title, _plain(message) or getString(30380) % _site())
         return RESULT_FAILED
+
+
+class ReturnsAssistant:
+    """
+    Returns assistant of the website (/digital/returns/), used by classic Amazon stores to cancel
+    video purchases. Its pages are rendered on the server: every answer (e.g. the reason
+    "accidental purchase") is a link with appAction=stepAction, the following page shows the
+    next question or the result. The answers are offered in Kodi, each one is confirmed before
+    it is sent.
+    """
+    MAX_STEPS = 5
+
+    def __init__(self, info, order):
+        self._title = info['title']
+        self._url = FQify(order['singleRefundLink'])
+
+    @staticmethod
+    def _get(url):
+        return getURL(url, useCookie=True, rjson=False, silent=True,
+                      headers={'Accept': 'text/html,application/xhtml+xml', 'Referer': _g.BaseUrl + '/gp/css/order-history'})
+
+    @staticmethod
+    def _parse(page):
+        """ Answers (label, url) and the main text of an assistant page """
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(page or '', 'html.parser')
+        answers = []
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            label = ' '.join(link.get_text(' ', strip=True).split())
+            if 'appAction=stepAction' in href and label and all(a[1] != href for a in answers):
+                answers.append((label, FQify(href.replace('&amp;', '&'))))
+        for form in soup.find_all('form'):
+            action = form.get('action') or ''
+            fields = {i.get('name'): i.get('value', '') for i in form.find_all('input') if i.get('name')}
+            if 'stepAction' in action + ' '.join(fields.values()) and (form.get('method') or 'get').lower() == 'get':
+                button = form.find(['button', 'input'], attrs={'type': 'submit'})
+                label = button.get_text(strip=True) if button and button.name == 'button' else (button.get('value') if button else '')
+                if label:
+                    query = urlencode(fields)
+                    answers.append((label, FQify(action or '/-/en/digital/returns/') + ('&' if '?' in action else '?') + query))
+        texts = [' '.join(t.get_text(' ', strip=True).split()) for t in soup.find_all(['h1', 'h2', 'h3', 'h4'])]
+        alerts = [' '.join(t.get_text(' ', strip=True).split()) for t in soup.select('.a-alert-content, [role=alert]')]
+        text = '[CR]'.join(t for t in texts + alerts if t)
+        return answers, text
+
+    def run(self):
+        dialog = xbmcgui.Dialog()
+        page = self._get(self._url)
+        for _ in range(self.MAX_STEPS):
+            answers, text = self._parse(page)
+            Log(f'[Purchase] Returns assistant page: {len(answers)} answers, text {text[:200]!r}')
+            if not answers:
+                # the result page: show Amazon's message
+                dialog.ok(self._title, text or getString(30380) % _site())
+                return bool(text)
+            labels = [label for label, _ in answers]
+            choice = 0 if len(answers) == 1 else dialog.select(text.split('[CR]')[0] or getString(30384), labels)
+            if choice < 0:
+                return False
+            label, url = answers[choice]
+            if not dialog.yesno(getString(30381), getString(30391) % (self._title, label)):
+                return False
+            answer = re.search(r'answerId=([^&]+)', url)
+            Log(f"[Purchase] Returns assistant answer: {answer.group(1) if answer else label!r}")
+            page = self._get(url)
+            if not page:
+                return self._fail()
+        return self._fail()
+
+    def _fail(self):
+        xbmcgui.Dialog().ok(self._title, getString(30380) % _site())
+        return False
+

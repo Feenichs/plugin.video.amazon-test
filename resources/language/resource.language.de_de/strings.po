@@ -1216,3 +1216,7 @@ msgstr "Käufe und Leihen: Filme"
 msgctxt "#30390"
 msgid "Purchases and rentals: TV shows"
 msgstr "Käufe und Leihen: Serien"
+
+msgctxt "#30391"
+msgid "%s[CR][CR]%s[CR][CR]Cancel the purchase with this answer?"
+msgstr "%s[CR][CR]%s[CR][CR]Kauf mit dieser Antwort stornieren?"
