@@ -144,15 +144,20 @@ def cancel_purchase(info):
         result = Workflow(info, refund_order=order).run()
         if result == RESULT_PURCHASED:
             dialog.notification(_g.__plugin__, getString(30382), time=3000, sound=False)
+        elif result == RESULT_FAILED and order.get('singleRefundLink'):
+            _show_refund_link(info, order)
         return result == RESULT_PURCHASED
     # classic Amazon stores cancel in the returns assistant of the website
-    link = order.get('singleRefundLink')
-    if link:
-        link = FQify(link) + '&return_to=/dp/' + info['asin']
-        dialog.textviewer(getString(30381), getString(30385) % (order.get('description', ''), link))
+    if order.get('singleRefundLink'):
+        _show_refund_link(info, order)
     else:
         dialog.ok(getString(30381), getString(30380) % _site())
     return False
+
+
+def _show_refund_link(info, order):
+    link = FQify(order['singleRefundLink']) + '&return_to=/dp/' + info['asin']
+    xbmcgui.Dialog().textviewer(getString(30381), getString(30385) % (order.get('description', ''), link))
 
 
 def _site():
@@ -208,9 +213,11 @@ class Workflow:
         client_data = {'action': step['action'], **(step.get('clientData') or {})} if step else {}
         client_data.update(self._client_data)
         client_data['dialogIngress'] = True
+        # the website leaves out undefined values (JSON.stringify), only serviceOverrides is sent as null
+        client_data = {k: v for k, v in client_data.items() if v is not None or k == 'serviceOverrides'}
         body = {'clientData': client_data, 'pageType': 'Detail', 'workflowType': self._workflow_type,
                 'initRequest': init, 'refererURI': ''}
-        Log(f"[Purchase] {self._workflow_type} request: {'start' if init else step.get('action')}", Log.DEBUG)
+        Log(f"[Purchase] {self._workflow_type} request: {'start' if init else step.get('action')}")
         response = getURL(FQify('/gp/video/acquisition/workflow/actions'), useCookie=True, rjson=False, silent=True,
                           postdata=json.dumps(body),
                           headers={'Content-Type': 'application/json; charset=UTF-8', 'Accept': 'application/json',
@@ -227,6 +234,7 @@ class Workflow:
         for _ in range(MAX_WORKFLOW_STEPS):
             contract = (response or {}).get('clientContract')
             if not isinstance(contract, dict):
+                Log(f'[Purchase] {self._workflow_type}: unexpected response {str(response)[:300]!r}', Log.ERROR)
                 return self._fail()
             task = contract.get('taskData') or {}
             if contract.get('taskType') == TASK_CALLBACK:
@@ -241,7 +249,7 @@ class Workflow:
 
     def _callback(self, task):
         name = ((task.get('templateData') or {}).get('callbacks') or {}).get(task.get('callbackId'), '')
-        Log(f'[Purchase] Workflow finished: {name}', Log.DEBUG)
+        Log(f'[Purchase] {self._workflow_type} finished: {name or task.get("callbackId")}')
         if name in CALLBACKS_SUCCESS:
             return RESULT_PURCHASED
         if name in CALLBACKS_CANCEL:
@@ -259,7 +267,7 @@ class Workflow:
         template = (task.get('templateData') or {}).get('widgetData') or {}
         layout = template.get('layoutType') or ''
         dialog = xbmcgui.Dialog()
-        Log(f'[Purchase] Workflow dialog: {layout or task.get("templateId")}', Log.DEBUG)
+        Log(f'[Purchase] {self._workflow_type} dialog: {layout or task.get("templateId")}')
 
         if layout == LAYOUT_CONFIRMATION:
             text = [view.get('messageBody'), view.get('messageBodySubtext'), view.get('submitButtonDetails'), view.get('messageFooterText')]
@@ -322,5 +330,6 @@ class Workflow:
         return None
 
     def _fail(self, title=None, message=None):
+        Log(f'[Purchase] {self._workflow_type} failed: {title!r} {message!r}', Log.ERROR)
         xbmcgui.Dialog().ok(_plain(title) or self._title, _plain(message) or getString(30380) % _site())
         return RESULT_FAILED

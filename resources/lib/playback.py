@@ -679,6 +679,10 @@ class _AmazonPlayer(xbmc.Player):
         self.resumedb = OSPJoin(_g.DATA_PATH, 'resume.db')
         self.sendvp = _s.send_vp
         self.event = 'START'
+        self.av_started = False
+
+    def onAVStarted(self):
+        self.av_started = True
 
     def resolve(self, li):
         if self.resume_request >= 0:
@@ -789,7 +793,8 @@ class _AmazonPlayer(xbmc.Player):
                 self.running = False
                 return
             sleep(self.sleeptm)
-            if self.isPlaying() and self.getTotalTime() >= self.getTime() >= 0:
+            # a video that was playing before (e.g. a trailer) keeps running until the new one has started
+            if self.av_started and self.isPlaying() and self.getTotalTime() >= self.getTime() >= 0:
                 self.video_totaltime = self.getTotalTime()
                 self.video_lastpos = self.getTime()
         Log(f'{msg}: {self.video_lastpos}/{self.video_totaltime}')
