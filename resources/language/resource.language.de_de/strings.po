@@ -1100,3 +1100,63 @@ msgstr "Details"
 msgctxt "#30361"
 msgid "Remove from history"
 msgstr "Aus dem Verlauf entfernen"
+
+msgctxt "#30362"
+msgid "Rent or buy"
+msgstr "Leihen oder kaufen"
+
+msgctxt "#30363"
+msgid "Rent %s"
+msgstr "Leihen %s"
+
+msgctxt "#30364"
+msgid "Buy %s"
+msgstr "Kaufen %s"
+
+msgctxt "#30365"
+msgid "Renting and buying in Kodi is not available yet. Please rent or buy the title in the browser on %s or in the Prime Video app, it then appears in Kodi."
+msgstr "Leihen und Kaufen in Kodi ist noch nicht verfügbar. Bitte leih oder kauf den Titel im Browser auf %s oder in der Prime-Video-App, danach erscheint er auch in Kodi."
+
+msgctxt "#30366"
+msgid "Purchases"
+msgstr "Käufe"
+
+msgctxt "#30367"
+msgid "Set purchase PIN"
+msgstr "Kauf-PIN festlegen"
+
+msgctxt "#30368"
+msgid "Remove purchase PIN"
+msgstr "Kauf-PIN entfernen"
+
+msgctxt "#30369"
+msgid "Purchase PIN"
+msgstr "Kauf-PIN"
+
+msgctxt "#30370"
+msgid "Repeat the PIN"
+msgstr "PIN wiederholen"
+
+msgctxt "#30371"
+msgid "Wrong PIN"
+msgstr "Falsche PIN"
+
+msgctxt "#30372"
+msgid "The PINs do not match"
+msgstr "Die PINs stimmen nicht überein"
+
+msgctxt "#30373"
+msgid "Confirm purchase"
+msgstr "Kauf bestätigen"
+
+msgctxt "#30374"
+msgid "%s[CR]%s[CR][CR]The amount is charged to your default payment method."
+msgstr "%s[CR]%s[CR][CR]Der Betrag wird über deine Standard-Zahlungsart abgebucht."
+
+msgctxt "#30375"
+msgid "PIN saved"
+msgstr "PIN gespeichert"
+
+msgctxt "#30376"
+msgid "PIN removed"
+msgstr "PIN entfernt"

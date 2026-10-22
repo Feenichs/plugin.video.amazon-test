@@ -72,6 +72,9 @@ def EntryPoint(argv):
             xbmcplugin.endOfDirectory(_g.pluginhandle, succeeded=False, cacheToDisc=False)
             return
         _g.pv.BrowseRoot()
+    elif mode in ('purchasePinSet', 'purchasePinRemove'):
+        from .home import purchase
+        purchase.set_pin() if mode == 'purchasePinSet' else purchase.remove_pin()
     elif mode == 'home':
         xbmc.executebuiltin(f"RunScript({_g.addon.getAddonInfo('id')},home)")
     elif mode == 'PlayVideo':

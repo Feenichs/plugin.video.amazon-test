@@ -1111,3 +1111,63 @@ msgstr ""
 msgctxt "#30361"
 msgid "Remove from history"
 msgstr ""
+
+msgctxt "#30362"
+msgid "Rent or buy"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Rent %s"
+msgstr ""
+
+msgctxt "#30364"
+msgid "Buy %s"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Renting and buying in Kodi is not available yet. Please rent or buy the title in the browser on %s or in the Prime Video app, it then appears in Kodi."
+msgstr ""
+
+msgctxt "#30366"
+msgid "Purchases"
+msgstr ""
+
+msgctxt "#30367"
+msgid "Set purchase PIN"
+msgstr ""
+
+msgctxt "#30368"
+msgid "Remove purchase PIN"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Purchase PIN"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Repeat the PIN"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Wrong PIN"
+msgstr ""
+
+msgctxt "#30372"
+msgid "The PINs do not match"
+msgstr ""
+
+msgctxt "#30373"
+msgid "Confirm purchase"
+msgstr ""
+
+msgctxt "#30374"
+msgid "%s[CR]%s[CR][CR]The amount is charged to your default payment method."
+msgstr ""
+
+msgctxt "#30375"
+msgid "PIN saved"
+msgstr ""
+
+msgctxt "#30376"
+msgid "PIN removed"
+msgstr ""

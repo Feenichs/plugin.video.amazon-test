@@ -335,6 +335,51 @@ def _playbacks(actions):
     return feature, trailer
 
 
+_MARKUP_RE = re.compile(r'\{(?:strike)\}.*?\{end\}|\{[a-zA-Z]+\}')
+
+
+def _offers(actions):
+    """ Rent and buy offers of a title, one per edition and quality """
+    offers = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            if node.get('actionType') == 'TRANSACT':
+                transaction = (node.get('payload') or {}).get('transaction') or {}
+                ref = transaction.get('refMarker', '')
+                kind = 'rent' if '_rent_' in ref else 'buy' if '_buy_' in ref and '_mis_' not in ref else None
+                label = ' '.join(_MARKUP_RE.sub(' ', transaction.get('label', '')).split())
+                if kind and transaction.get('asin') and transaction.get('offerToken'):
+                    # the buy box repeats offers of the "more ways to watch" list with longer labels
+                    for offer in offers:
+                        if offer['asin'] == transaction['asin'] and offer['kind'] == kind:
+                            break
+                    else:
+                        offers.append({'kind': kind, 'label': label, 'asin': transaction['asin'],
+                                       'offer_token': transaction['offerToken'],
+                                       'purchase_data': transaction.get('purchaseData', ''),
+                                       'csrf_token': transaction.get('csrfToken', ''),
+                                       'csrf_workflow': transaction.get('csrfTokenWorkflow', ''),
+                                       'ref': ref})
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(actions or {})
+    # short labels ("HD €3.99") without the action word, sorted rent first and by price
+    for offer in offers:
+        offer['label'] = re.sub(r'^(?:Rent|Buy movie|Buy season|Buy episode|Buy|Leihen|Kaufen)\s*', '', offer['label'], flags=re.I)
+    quality = {'SD': 0, 'HD': 1, 'UHD': 2}
+    return sorted(offers, key=lambda o: (o['kind'] != 'rent', quality.get(o['label'].split(' ')[0], 3), _price(o['label'])))
+
+
+def _price(label):
+    prices = re.findall(r'(\d+[.,]\d{2})', label)
+    return float(prices[-1].replace(',', '.')) if prices else 0.0
+
+
 def _entitlement(actions):
     messages = (actions or {}).get('messages') or {}
     return messages.get('entitlementType', '').lower() == 'entitled', _text((messages.get('focusMessage') or {}).get('dvMessage'))
@@ -379,6 +424,7 @@ def detail(url):
         'message': message,
         'feature': _play_info(feature),
         'trailer': bool(trailer),
+        'offers': [] if entitled else _offers(actions.get(tid)),
         'watchlist': watchlist.get('endpoint'),
         'in_watchlist': (watchlist.get('tag') or '').lower() == 'remove',
         'seasons': [],

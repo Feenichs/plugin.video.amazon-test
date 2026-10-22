@@ -14,7 +14,7 @@ from urllib.parse import urlencode
 import xbmc
 import xbmcgui
 
-from . import data
+from . import data, purchase
 from ..common import Globals, Settings
 from ..configs import getConfig, writeConfig
 from ..l10n import getString
@@ -595,7 +595,8 @@ class HomeWindow(xbmcgui.WindowXML):
             if feature and feature['resume'] > 0:
                 buttons.append(('resume', getString(30345) % _format_time(feature['resume'])))
                 buttons.append(('start', getString(30332)))
-            else:
+            elif feature or info.get('entitled'):
+                # titles that have to be rented, bought or subscribed first have no playback action
                 buttons.append(('play', getString(30330)))
         elif episodes:
             resume = next((e for e in episodes if 0 < e['progress'] < 95), None)
@@ -603,6 +604,8 @@ class HomeWindow(xbmcgui.WindowXML):
                 buttons.append(('episode', getString(30356) % (resume['episode'], _format_time(resume['resume']))))
             else:
                 buttons.append(('episode', getString(30357) % episodes[0]['episode']))
+        if info.get('offers'):
+            buttons.append(('offers', getString(30362)))
         if info.get('trailer'):
             buttons.append(('trailer', getString(30333)))
         if info.get('watchlist'):
@@ -676,6 +679,13 @@ class HomeWindow(xbmcgui.WindowXML):
             self._play(episode['asin'], episode['label'], resume=episode['resume'])
         elif action == 'trailer':
             self._play(info['asin'], title, streamtype=1, resume=0)
+        elif action == 'offers':
+            if purchase.choose_and_purchase(title, info['offers']):
+                # reload the page, it now offers playback
+                self._cache = {}
+                self._stack[-1]['detail'] = None
+                self._restore = (BUTTON_LIST, 0, 0)
+                self._show_detail(self._stack[-1])
         elif action == 'watchlist':
             add = not info.get('in_watchlist')
             if data.watchlist_toggle(info['watchlist'], add):
