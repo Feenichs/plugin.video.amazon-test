@@ -82,7 +82,8 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
 
     def _extrFr(data):
         fps_string = re.compile('frameRate="([^"]*)').findall(data)[0]
-        fr = round(eval(fps_string + '.0'), 3)
+        num, _, den = fps_string.partition('/')
+        fr = round(float(num) / float(den or 1), 3)
         return str(fr).replace('.0', '')
 
     def _ParseStreams(suc, data, retmpd=False, bypassproxy=False, webid=False):
@@ -113,7 +114,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
         Log(f"auxCacheKey: {auxKey}", Log.DEBUG)
 
         while hosts:
-            for cdn in hosts:
+            for cdn in list(hosts):
                 prefHost = False if HostSet not in str(hosts) or HostSet == 'Auto' else HostSet
                 cdn_item = cdn
 
@@ -401,11 +402,12 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
         # available though token based authentification.
 
         for preferTokenToCookie in ([True, False] if _s.wvl1_device and streamtype != 2 else [False]):
-            cookie, req_param, headers, dtid, req_headers = _getPlaybackVars(preferToken=preferTokenToCookie)
-            if not cookie:
+            playback_vars = _getPlaybackVars(preferToken=preferTokenToCookie)
+            if not playback_vars:
                 _g.dialog.notification(getString(30203), getString(30200), xbmcgui.NOTIFICATION_ERROR)
                 Log('Login error at playback')
                 return False
+            cookie, req_param, headers, dtid, req_headers = playback_vars
 
             success, data = getURLData('catalog/GetPlaybackResources', asin, extra=True, vMT=vMT, dRes=dRes, useCookie=cookie, devicetypeid=dtid,
                                        proxyEndpoint=(None if bypassproxy else 'gpr'), opt=opt)
@@ -453,6 +455,10 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0):
         listitem.setMimeType('application/dash+xml')
         listitem.setProperty(f'{_g.is_addon}.manifest_headers', urlencode(headers))
         listitem.setContentLookup(False)
+        if _s.stream_quality == 0:
+            # The default chooser of inputstream.adaptive never updates its bandwidth estimate on
+            # Amazon's small segments and stays on the initial low resolution for the whole video
+            listitem.setProperty('inputstream.adaptive.stream_selection_type', 'fixed-res')
 
         if list(map(int, is_version.split('.'))) < [22, 1, 5]:
             listitem.setProperty(f'{_g.is_addon}.license_type', 'com.widevine.alpha')
@@ -709,7 +715,8 @@ class _AmazonPlayer(xbmc.Player):
 
     def getResumePoint(self):
         from codecs import open as co
-        if not xbmcvfs.exists(self.resumedb) or self.content == 2:
+        # Trailers and live streams share the ASIN of the feature, they must not touch its resume point
+        if not xbmcvfs.exists(self.resumedb) or self.content in (1, 2):
             return {}
         with co(self.resumedb, 'rb') as fp:
             try:
@@ -722,12 +729,12 @@ class _AmazonPlayer(xbmc.Player):
 
     def saveResumePoint(self):
         from codecs import open as co
-        if self.content == 2:
+        if self.content in (1, 2):
             return
         items = self.getResumePoint()
         with co(self.resumedb, 'wb+') as fp:
-            if self.watched and self.asin in items.keys():
-                del items[self.asin]
+            if self.watched:
+                items.pop(self.asin, None)
             else:
                 items.update({self.asin: {'resume': self.video_lastpos}})
             pickle.dump(items, fp, 2)
@@ -746,7 +753,8 @@ class _AmazonPlayer(xbmc.Player):
             jsonRPC('Player.SetSubtitle', param={'playerid': 1, 'subtitle': cur_sub['index']})
 
     def updateStream(self):
-        if not self.asin:
+        # A trailer would report progress for the feature with the same ASIN
+        if not self.asin or self.content == 1:
             return
         perc = (self.video_lastpos * 100) / self.video_totaltime if self.video_lastpos > 0 and self.video_totaltime > 0 else 0
         if 0 < self.sendvp <= perc:
@@ -767,8 +775,14 @@ class _AmazonPlayer(xbmc.Player):
                 self.watched = 1 if (self.video_lastpos * 100) / self.video_totaltime >= 90 else 0
                 self.saveResumePoint()
 
-    def getTimes(self, msg):
+    def getTimes(self, msg, timeout=60):
+        # Give up when playback never starts (e.g. a license error), instead of waiting forever
+        deadline = time.time() + timeout
         while self.video_totaltime <= 0:
+            if time.time() > deadline:
+                Log(f'{msg}: playback did not start within {timeout}s', Log.ERROR)
+                self.running = False
+                return
             sleep(self.sleeptm)
             if self.isPlaying() and self.getTotalTime() >= self.getTime() >= 0:
                 self.video_totaltime = self.getTotalTime()
