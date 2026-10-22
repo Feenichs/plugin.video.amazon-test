@@ -6,20 +6,24 @@
     <animation effect="fade" time="250">WindowOpen</animation>
     <animation effect="fade" time="200">WindowClose</animation>
     <controls>
-        <!-- a video playing in the background must be rendered, otherwise it runs out of sync -->
+        <!--
+            A video that keeps playing in the background has to be rendered, otherwise it runs
+            out of sync with the audio. It is shown in the preview area of the tabs and of the
+            detail page, or dimmed behind the grid.
+        -->
         <control type="videowindow">
             <width>1920</width><height>1080</height>
-            <visible>Player.HasVideo</visible>
+            <visible>Player.HasVideo + String.IsEqual(Window.Property(view),grid)</visible>
         </control>
         <control type="image">
             <width>1920</width><height>1080</height>
             <texture colordiffuse="FF0F171E">pv_white.png</texture>
-            <visible>!Player.HasVideo</visible>
+            <visible>!Player.HasVideo | !String.IsEqual(Window.Property(view),grid)</visible>
         </control>
         <control type="image">
             <width>1920</width><height>1080</height>
             <texture colordiffuse="E60F171E">pv_white.png</texture>
-            <visible>Player.HasVideo</visible>
+            <visible>Player.HasVideo + String.IsEqual(Window.Property(view),grid)</visible>
         </control>
 
         <!-- Preview of the focused title on tabs and category pages -->
@@ -31,6 +35,10 @@
                 <fadetime>300</fadetime>
                 <texture background="true">$INFO[ListItem.Art(fanart)]</texture>
                 <visible>!Player.HasVideo</visible>
+            </control>
+            <control type="videowindow">
+                <left>560</left><top>0</top><width>1360</width><height>765</height>
+                <visible>Player.HasVideo</visible>
             </control>
             <control type="image">
                 <left>560</left><top>0</top><width>800</width><height>765</height>
@@ -99,6 +107,10 @@
                 <fadetime>300</fadetime>
                 <texture background="true">$INFO[Container(301).ListItem.Art(fanart)]</texture>
                 <visible>!Player.HasVideo</visible>
+            </control>
+            <control type="videowindow">
+                <left>560</left><top>0</top><width>1360</width><height>765</height>
+                <visible>Player.HasVideo</visible>
             </control>
             <control type="image">
                 <left>560</left><top>0</top><width>800</width><height>765</height>
@@ -169,6 +181,10 @@
                 <texture background="true">$INFO[Window.Property(detail_fanart)]</texture>
                 <visible>!Player.HasVideo</visible>
             </control>
+            <control type="videowindow">
+                <left>420</left><top>0</top><width>1500</width><height>844</height>
+                <visible>Player.HasVideo</visible>
+            </control>
             <control type="image">
                 <left>420</left><top>0</top><width>900</width><height>844</height>
                 <texture>pv_gradient_left.png</texture>
@@ -180,7 +196,6 @@
             <control type="image">
                 <top>844</top><width>1920</width><height>236</height>
                 <texture colordiffuse="FF0F171E">pv_white.png</texture>
-                <visible>!Player.HasVideo</visible>
             </control>
             <control type="image">
                 <width>1920</width><height>220</height>

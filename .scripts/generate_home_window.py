@@ -386,6 +386,10 @@ PREVIEW_TEMPLATE = '''        <!-- Preview of the focused title on tabs and cate
                 <texture background="true">$INFO[{li}ListItem.Art(fanart)]</texture>
                 <visible>!Player.HasVideo</visible>
             </control>
+            <control type="videowindow">
+                <left>560</left><top>0</top><width>1360</width><height>765</height>
+                <visible>Player.HasVideo</visible>
+            </control>
             <control type="image">
                 <left>560</left><top>0</top><width>800</width><height>765</height>
                 <texture>pv_gradient_left.png</texture>
@@ -455,20 +459,24 @@ WINDOW_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
     <animation effect="fade" time="250">WindowOpen</animation>
     <animation effect="fade" time="200">WindowClose</animation>
     <controls>
-        <!-- a video playing in the background must be rendered, otherwise it runs out of sync -->
+        <!--
+            A video that keeps playing in the background has to be rendered, otherwise it runs
+            out of sync with the audio. It is shown in the preview area of the tabs and of the
+            detail page, or dimmed behind the grid.
+        -->
         <control type="videowindow">
             <width>1920</width><height>1080</height>
-            <visible>Player.HasVideo</visible>
+            <visible>Player.HasVideo + {grid_view}</visible>
         </control>
         <control type="image">
             <width>1920</width><height>1080</height>
             <texture colordiffuse="{background}">pv_white.png</texture>
-            <visible>!Player.HasVideo</visible>
+            <visible>!Player.HasVideo | !{grid_view}</visible>
         </control>
         <control type="image">
             <width>1920</width><height>1080</height>
             <texture colordiffuse="E6{background_rgb}">pv_white.png</texture>
-            <visible>Player.HasVideo</visible>
+            <visible>Player.HasVideo + {grid_view}</visible>
         </control>
 
 {preview}
@@ -482,6 +490,10 @@ WINDOW_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
                 <texture background="true">$INFO[Window.Property(detail_fanart)]</texture>
                 <visible>!Player.HasVideo</visible>
             </control>
+            <control type="videowindow">
+                <left>420</left><top>0</top><width>1500</width><height>844</height>
+                <visible>Player.HasVideo</visible>
+            </control>
             <control type="image">
                 <left>420</left><top>0</top><width>900</width><height>844</height>
                 <texture>pv_gradient_left.png</texture>
@@ -493,7 +505,6 @@ WINDOW_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
             <control type="image">
                 <top>844</top><width>1920</width><height>236</height>
                 <texture colordiffuse="{background}">pv_white.png</texture>
-                <visible>!Player.HasVideo</visible>
             </control>
             <control type="image">
                 <width>1920</width><height>220</height>
@@ -700,6 +711,7 @@ def generate_window():
         preview=preview(),
         background=BACKGROUND,
         background_rgb=BACKGROUND[2:],
+        grid_view='String.IsEqual(Window.Property(view),grid)',
         tab_view='String.IsEqual(Window.Property(view),tab)',
         text_tiles=' | '.join('String.IsEqual(ListItem.Property(kind),%s)' % kind for kind in TEXT_KINDS),
         text=TEXT, dim=TEXT_DIM, message=MESSAGE,
