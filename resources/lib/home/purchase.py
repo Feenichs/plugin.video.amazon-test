@@ -11,8 +11,8 @@ with a callback. The answer to a dialog is sent as the next request. This
 module shows these dialogs with Kodi's dialogs, following the website's
 checkout code (DVWebClient checkout-purchase-flow).
 
-Before a purchase is started, the purchase PIN of the add-on is asked. It is
-stored as a salted hash in the add-on's config folder.
+Before a purchase is started, the parents' PIN of the add-on is asked (see
+parental.py).
 """
 import hashlib
 import json
@@ -26,12 +26,11 @@ from ..configs import getConfig, writeConfig
 from ..l10n import getString
 from ..logging import Log
 from ..network import getURL, FQify
+from ..parental import pin_is_set, check_pin, set_pin, remove_pin  # noqa: F401 (settings actions)
 
 _g = Globals()
 
 PURCHASE_ENABLED = True
-PIN_CONFIG = 'purchase_pin'
-MAX_PIN_ATTEMPTS = 3
 MAX_WORKFLOW_STEPS = 10
 WEB_DEVICE_TYPE = 'AOAGZA014O5RE'
 
@@ -50,53 +49,6 @@ CALLBACK_CSRF = 'callbackCSRF'
 RESULT_PURCHASED = 'purchased'
 RESULT_CANCELLED = 'cancelled'
 RESULT_FAILED = 'failed'
-
-
-def _hash(pin, salt):
-    return hashlib.sha256((salt + pin).encode('utf-8')).hexdigest()
-
-
-def pin_is_set():
-    return bool(getConfig(PIN_CONFIG))
-
-
-def check_pin():
-    """ True if no PIN is set or the user entered it correctly """
-    stored = getConfig(PIN_CONFIG)
-    if not stored:
-        return True
-    salt, _, digest = stored.partition(':')
-    for _ in range(MAX_PIN_ATTEMPTS):
-        pin = xbmcgui.Dialog().numeric(0, getString(30369), bHiddenInput=True)
-        if not pin:
-            return False
-        if _hash(pin, salt) == digest:
-            return True
-        xbmcgui.Dialog().notification(_g.__plugin__, getString(30371), xbmcgui.NOTIFICATION_WARNING, 2000)
-    return False
-
-
-def set_pin():
-    """ Set or change the purchase PIN, an existing PIN has to be entered first """
-    if not check_pin():
-        return False
-    dialog = xbmcgui.Dialog()
-    pin = dialog.numeric(0, getString(30369), bHiddenInput=True)
-    if not pin:
-        return False
-    if dialog.numeric(0, getString(30370), bHiddenInput=True) != pin:
-        dialog.ok(_g.__plugin__, getString(30372))
-        return False
-    salt = os.urandom(16).hex()
-    writeConfig(PIN_CONFIG, f'{salt}:{_hash(pin, salt)}')
-    dialog.notification(_g.__plugin__, getString(30375), time=2000, sound=False)
-    return True
-
-
-def remove_pin():
-    if pin_is_set() and check_pin():
-        writeConfig(PIN_CONFIG, '')
-        xbmcgui.Dialog().notification(_g.__plugin__, getString(30376), time=2000, sound=False)
 
 
 def offer_label(offer):

@@ -767,13 +767,13 @@ class HomeWindow(xbmcgui.WindowXML):
         if action in ('play', 'resume', 'start'):
             feature = info.get('feature') or {}
             resume = feature.get('resume', 0) if action == 'resume' else 0
-            self._play(info['asin'], title, resume=resume)
+            self._play(info['asin'], title, resume=resume, rating=info['rating'])
         elif action == 'episode':
             episodes = info['episodes']
             episode = next((e for e in episodes if 0 < e['progress'] < 95), episodes[0])
-            self._play(episode['asin'], episode['label'], resume=episode['resume'])
+            self._play(episode['asin'], episode['label'], resume=episode['resume'], rating=episode['rating'])
         elif action == 'trailer':
-            self._play(info['asin'], title, streamtype=1, resume=0)
+            self._play(info['asin'], title, streamtype=1, resume=0, rating=info['rating'])
         elif action in ('offers', 'refund'):
             done = purchase.choose_and_purchase(info, info['offers']) if action == 'offers' else purchase.cancel_purchase(info)
             if done:
@@ -858,26 +858,26 @@ class HomeWindow(xbmcgui.WindowXML):
         elif kind == data.KIND_EPISODE:
             self._play_with_resume(item)
         elif kind == data.KIND_STATION:
-            self._play(item['asin'], item['label'], streamtype=2, resume=0)
+            self._play(item['asin'], item['label'], rating=item['rating'], streamtype=2, resume=0)
         elif kind == data.KIND_EVENT:
-            self._play(item['asin'], item['label'], streamtype=3, resume=0)
+            self._play(item['asin'], item['label'], rating=item['rating'], streamtype=3, resume=0)
 
     def _context_menu(self, item):
         kind = item['kind']
         entries = []
         if kind in (data.KIND_TITLE, data.KIND_EPISODE):
             if item['resume'] > 0:
-                entries.append((getString(30345) % _format_time(item['resume']), lambda: self._play(item['asin'], item['label'], resume=item['resume'])))
-                entries.append((getString(30332), lambda: self._play(item['asin'], item['label'], resume=0)))
+                entries.append((getString(30345) % _format_time(item['resume']), lambda: self._play(item['asin'], item['label'], rating=item['rating'], resume=item['resume'])))
+                entries.append((getString(30332), lambda: self._play(item['asin'], item['label'], rating=item['rating'], resume=0)))
             if kind == data.KIND_TITLE:
                 entries.insert(0, (getString(30360), lambda: self._open_detail(item)))
-                entries.append((getString(30333), lambda: self._play(item['asin'], item['label'], streamtype=1, resume=0)))
+                entries.append((getString(30333), lambda: self._play(item['asin'], item['label'], rating=item['rating'], streamtype=1, resume=0)))
                 if item['watchlist']:
                     entries.append((getString(30334), lambda: self._toggle_watchlist(item, True)))
                     if self._current_tab == TAB_WATCHLIST and not self._stack:
                         entries.append((getString(30335), lambda: self._toggle_watchlist(item, False)))
             else:
-                entries.insert(0, (getString(30330), lambda: self._play(item['asin'], item['label'], resume=0)))
+                entries.insert(0, (getString(30330), lambda: self._play(item['asin'], item['label'], rating=item['rating'], resume=0)))
         elif kind == data.KIND_ACTION and item['action'] == 'search_query':
             entries.append((getString(30361), lambda: self._remove_search(item['label'])))
         if not entries:
@@ -927,16 +927,17 @@ class HomeWindow(xbmcgui.WindowXML):
             choice = xbmcgui.Dialog().contextmenu([getString(30345) % _format_time(item['resume']), getString(30332)])
             if choice < 0:
                 return
-            self._play(item['asin'], item['label'], resume=item['resume'] if choice == 0 else 0)
+            self._play(item['asin'], item['label'], rating=item['rating'], resume=item['resume'] if choice == 0 else 0)
         else:
-            self._play(item['asin'], item['label'], resume=0)
+            self._play(item['asin'], item['label'], rating=item['rating'], resume=0)
 
-    def _play(self, asin, name, streamtype=0, resume=-1):
+    def _play(self, asin, name, streamtype=0, resume=-1, rating=''):
         if not asin:
             return
         self._remember_focus()
+        # the age rating decides whether playback asks for a PIN (parental.py)
         query = urlencode({'mode': 'PlayVideo', 'asin': asin, 'name': name, 'adult': '0', 'trailer': streamtype,
-                           'selbitrate': '0', 'resume': resume})
+                           'selbitrate': '0', 'resume': resume, 'rating': rating or ''})
         Log(f'[Home] Playing {asin} (type {streamtype}, resume {resume})', Log.DEBUG)
         xbmc.executebuiltin(f'PlayMedia({_g.pluginid}?{query})')
 

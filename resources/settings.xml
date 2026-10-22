@@ -37,6 +37,24 @@
 					<control type="button" format="action"/>
 				</setting>
 			</group>
+			<group id="parental" label="30396">
+				<setting id="parental_age" type="action" label="30397" help="">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=parentalAge)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="action"/>
+				</setting>
+				<setting id="parental_children" type="action" label="30398" help="">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=parentalChildren)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="action"/>
+				</setting>
+			</group>
 			<group id="1">
 				<setting id="playmethod" type="integer" label="30012" help="">
 					<level>0</level>
@@ -319,21 +337,6 @@
 				<setting id="is_settings" type="action" label="30013" help="">
 					<level>0</level>
 					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=openSettings&url=is)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="playmethod">3</condition>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="age_settings" type="action" label="30018" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=ageSettings)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>

@@ -66,7 +66,7 @@ def _Input(mousex=0, mousey=0, click=0, keys=None, delay='0.2'):
     Log(f'Input command: Mouse(x={mousex}, y={mousey}, click={click}), Keyboard({keys})')
 
 
-def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
+def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=None):
     def _check_output(*popenargs, **kwargs):
         p = subprocess.Popen(stdout=subprocess.PIPE, stderr=subprocess.STDOUT, *popenargs, **kwargs)
         out, err = p.communicate()
@@ -379,7 +379,6 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
         return pid, livestate
 
     def _IStreamPlayback(asin, name, streamtype, isAdult, extern, resume=-1):
-        from .ages import AgeRestrictions
         bypassproxy = _s.proxy_mpdalter or (streamtype > 1)
         if streamtype == 3:
             streamtype, asin = _EventState(asin)
@@ -388,7 +387,6 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
         vMT = ['Feature', 'Trailer', 'LiveStreaming'][streamtype]
         dRes = 'PlaybackUrls' if streamtype > 1 else 'PlaybackUrls,SubtitleUrls,ForcedNarratives,TransitionTimecodes'
         opt = '&liveManifestType=accumulating,live&playerType=xp&playerAttributes={"frameRate":"HFR"}&deviceFrameRateOverride=High' if streamtype > 1 else ''
-        mpaa_str = AgeRestrictions().GetRestrictedAges() + getString(30171)
 
         inputstream_helper = Helper('mpd', drm='com.widevine.alpha')
         if not inputstream_helper.check_inputstream():
@@ -428,7 +426,6 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
 
         Log(mpd, Log.DEBUG)
 
-        mpaa_check = _getListItem('MPAA') in mpaa_str + mpaa_str.replace(' ', '') or isAdult
         title = _getListItem('Label')
         thumb = _getListItem('Art(season.poster)')
         if not thumb:
@@ -440,9 +437,6 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
             title += ' (Trailer)'
         if not title:
             title = name
-
-        if mpaa_check and not AgeRestrictions().RequestPin():
-            return True
 
         Log(f'Using {_g.is_addon} Version: {is_version}')
 
@@ -532,6 +526,13 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1):
         return False
 
     isAdult = adultstr == '1'
+    # age rating from the TV interface, else from the list item of the classic menu
+    from .parental import may_play
+    if rating is None:
+        rating = _getListItem('MPAA') or ('18' if isAdult else '')
+    if not may_play(rating, name or _getListItem('Label')):
+        xbmcplugin.setResolvedUrl(_g.pluginhandle, False, xbmcgui.ListItem())
+        return
     amazonUrl = _g.BaseUrl + "/dp/" + (name if _g.UsePrimeVideo else asin)
     videoUrl = f"{amazonUrl}/?autoplay={'trailer' if streamtype == 1 else '1'}"
     extern = not xbmc.getInfoLabel('Container.PluginName').startswith('plugin.video.amazon')

@@ -1118,20 +1118,20 @@ msgid "Renting and buying in Kodi is not available yet. Please rent or buy the t
 msgstr "Leihen und Kaufen in Kodi ist noch nicht verfügbar. Bitte leih oder kauf den Titel im Browser auf %s oder in der Prime-Video-App, danach erscheint er auch in Kodi."
 
 msgctxt "#30366"
-msgid "Purchases"
-msgstr "Käufe"
+msgid "PIN and purchases"
+msgstr "PIN und Käufe"
 
 msgctxt "#30367"
-msgid "Set purchase PIN"
-msgstr "Kauf-PIN festlegen"
+msgid "Set parents' PIN (also for purchases)"
+msgstr "Eltern-PIN festlegen (auch für Käufe)"
 
 msgctxt "#30368"
-msgid "Remove purchase PIN"
-msgstr "Kauf-PIN entfernen"
+msgid "Remove parents' PIN"
+msgstr "Eltern-PIN entfernen"
 
 msgctxt "#30369"
-msgid "Purchase PIN"
-msgstr "Kauf-PIN"
+msgid "Parents' PIN"
+msgstr "Eltern-PIN"
 
 msgctxt "#30370"
 msgid "Repeat the PIN"
@@ -1162,8 +1162,8 @@ msgid "PIN removed"
 msgstr "PIN entfernt"
 
 msgctxt "#30377"
-msgid "Purchases in Kodi are protected by a PIN. Please set it now."
-msgstr "Käufe in Kodi sind mit einer PIN geschützt. Bitte lege sie jetzt fest."
+msgid "Purchases in Kodi are protected by the parents' PIN. Please set it now."
+msgstr "Käufe in Kodi sind mit der Eltern-PIN geschützt. Bitte lege sie jetzt fest."
 
 msgctxt "#30378"
 msgid "Purchase completed"
@@ -1233,3 +1233,91 @@ msgstr "Amazon meldet eventuell „We're unable to process the withdrawal“, ob
 msgctxt "#30395"
 msgid "Free with ads"
 msgstr "Kostenlos mit Werbung"
+
+msgctxt "#30396"
+msgid "Parental controls"
+msgstr "Kindersicherung"
+
+msgctxt "#30397"
+msgid "PIN required from age rating…"
+msgstr "PIN-Abfrage ab Altersfreigabe…"
+
+msgctxt "#30398"
+msgid "Children's PINs…"
+msgstr "Kinder-PINs…"
+
+msgctxt "#30399"
+msgid "Off"
+msgstr "Aus"
+
+msgctxt "#30400"
+msgid "All titles"
+msgstr "Alle Titel"
+
+msgctxt "#30401"
+msgid "From %s"
+msgstr "Ab %s"
+
+msgctxt "#30402"
+msgid "Titles without age rating"
+msgstr "Titel ohne Altersfreigabe"
+
+msgctxt "#30403"
+msgid "Without PIN"
+msgstr "Ohne PIN"
+
+msgctxt "#30404"
+msgid "Any PIN, also children's PINs"
+msgstr "Jede PIN, auch Kinder-PINs"
+
+msgctxt "#30405"
+msgid "Only the parents' PIN"
+msgstr "Nur die Eltern-PIN"
+
+msgctxt "#30406"
+msgid "Add child"
+msgstr "Kind hinzufügen"
+
+msgctxt "#30407"
+msgid "Name of the child"
+msgstr "Name des Kindes"
+
+msgctxt "#30408"
+msgid "Allowed titles"
+msgstr "Freigegebene Titel"
+
+msgctxt "#30409"
+msgid "Up to %s"
+msgstr "Bis %s"
+
+msgctxt "#30410"
+msgid "New PIN"
+msgstr "Neue PIN"
+
+msgctxt "#30411"
+msgid "Change age rating"
+msgstr "Altersfreigabe ändern"
+
+msgctxt "#30412"
+msgid "Remove"
+msgstr "Entfernen"
+
+msgctxt "#30413"
+msgid "PIN for %s"
+msgstr "PIN für %s"
+
+msgctxt "#30414"
+msgid "This PIN only unlocks titles up to %s."
+msgstr "Diese PIN gibt nur Titel bis %s frei."
+
+msgctxt "#30415"
+msgid "This PIN is already in use."
+msgstr "Diese PIN ist schon vergeben."
+
+msgctxt "#30416"
+msgid "Please set the parents' PIN first. It also protects purchases."
+msgstr "Lege bitte zuerst die Eltern-PIN fest. Sie schützt auch die Käufe."
+
+msgctxt "#30417"
+msgid "Parental controls have been turned off."
+msgstr "Die Kindersicherung wurde ausgeschaltet."

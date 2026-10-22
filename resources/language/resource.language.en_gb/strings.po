@@ -1129,19 +1129,19 @@ msgid "Renting and buying in Kodi is not available yet. Please rent or buy the t
 msgstr ""
 
 msgctxt "#30366"
-msgid "Purchases"
+msgid "PIN and purchases"
 msgstr ""
 
 msgctxt "#30367"
-msgid "Set purchase PIN"
+msgid "Set parents' PIN (also for purchases)"
 msgstr ""
 
 msgctxt "#30368"
-msgid "Remove purchase PIN"
+msgid "Remove parents' PIN"
 msgstr ""
 
 msgctxt "#30369"
-msgid "Purchase PIN"
+msgid "Parents' PIN"
 msgstr ""
 
 msgctxt "#30370"
@@ -1173,7 +1173,7 @@ msgid "PIN removed"
 msgstr ""
 
 msgctxt "#30377"
-msgid "Purchases in Kodi are protected by a PIN. Please set it now."
+msgid "Purchases in Kodi are protected by the parents' PIN. Please set it now."
 msgstr ""
 
 msgctxt "#30378"
@@ -1243,4 +1243,92 @@ msgstr ""
 
 msgctxt "#30395"
 msgid "Free with ads"
+msgstr ""
+
+msgctxt "#30396"
+msgid "Parental controls"
+msgstr ""
+
+msgctxt "#30397"
+msgid "PIN required from age rating…"
+msgstr ""
+
+msgctxt "#30398"
+msgid "Children's PINs…"
+msgstr ""
+
+msgctxt "#30399"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30400"
+msgid "All titles"
+msgstr ""
+
+msgctxt "#30401"
+msgid "From %s"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Titles without age rating"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Without PIN"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Any PIN, also children's PINs"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Only the parents' PIN"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Add child"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Name of the child"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Allowed titles"
+msgstr ""
+
+msgctxt "#30409"
+msgid "Up to %s"
+msgstr ""
+
+msgctxt "#30410"
+msgid "New PIN"
+msgstr ""
+
+msgctxt "#30411"
+msgid "Change age rating"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30413"
+msgid "PIN for %s"
+msgstr ""
+
+msgctxt "#30414"
+msgid "This PIN only unlocks titles up to %s."
+msgstr ""
+
+msgctxt "#30415"
+msgid "This PIN is already in use."
+msgstr ""
+
+msgctxt "#30416"
+msgid "Please set the parents' PIN first. It also protects purchases."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Parental controls have been turned off."
 msgstr ""

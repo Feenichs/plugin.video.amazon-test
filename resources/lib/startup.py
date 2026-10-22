@@ -73,14 +73,17 @@ def EntryPoint(argv):
             return
         _g.pv.BrowseRoot()
     elif mode in ('purchasePinSet', 'purchasePinRemove'):
-        from .home import purchase
-        purchase.set_pin() if mode == 'purchasePinSet' else purchase.remove_pin()
+        from . import parental
+        parental.set_pin() if mode == 'purchasePinSet' else parental.remove_pin()
+    elif mode in ('parentalAge', 'parentalChildren'):
+        from . import parental
+        parental.age_settings() if mode == 'parentalAge' else parental.children_settings()
     elif mode == 'home':
         xbmc.executebuiltin(f"RunScript({_g.addon.getAddonInfo('id')},home)")
     elif mode == 'PlayVideo':
         from .playback import PlayVideo
         PlayVideo(args.get('name', ''), args.get('asin'), args.get('adult', '0'), int(args.get('trailer', '0')), int(args.get('selbitrate', '0')),
-                  int(args.get('resume', '-1')))
+                  int(args.get('resume', '-1')), args.get('rating'))
     elif mode == 'openSettings':
         aid = args.get('url')
         aid = _g.is_addon if aid == 'is' else aid
