@@ -1207,3 +1207,7 @@ msgstr ""
 msgctxt "#30385"
 msgid "%s[CR][CR]On this Amazon store purchases are cancelled in the returns assistant of the website. Open this address in a browser:[CR][CR]%s"
 msgstr ""
+
+msgctxt "#30386"
+msgid "My Stuff"
+msgstr ""

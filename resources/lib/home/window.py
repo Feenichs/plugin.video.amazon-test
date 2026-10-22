@@ -282,7 +282,9 @@ class HomeWindow(xbmcgui.WindowXML):
                     {'id': 'movies', 'title': getString(30353), 'url': vp + '/movie'},
                     {'id': 'tv', 'title': getString(30354), 'url': vp + '/tv'},
                     {'id': 'livetv', 'title': getString(30346), 'url': vp + '/livetv'}]
-        tabs.append({'id': TAB_WATCHLIST, 'title': getString(30323), 'url': vp + '/mystuff/watchlist'})
+        # "My Stuff" like in the app: the watchlist and the purchases and rentals (video library)
+        tabs.append({'id': TAB_WATCHLIST, 'title': getString(30386), 'url': vp + '/mystuff/watchlist',
+                     'urls': (vp + '/mystuff/watchlist', vp + '/mystuff/library')})
         tabs.append({'id': TAB_SEARCH, 'title': getString(30324), 'url': None})
         tabs.append({'id': TAB_ACCOUNT, 'title': getString(30350), 'url': None})
         return tabs
@@ -330,7 +332,9 @@ class HomeWindow(xbmcgui.WindowXML):
         if tab_id == TAB_ACCOUNT:
             return self._account_rows()
         tab = self._tab(tab_id)
-        return self._page_rows(tab['url']) if tab else []
+        if not tab:
+            return []
+        return [row for url in tab.get('urls', (tab['url'],)) for row in self._page_rows(url)]
 
     def _page_rows(self, url, use_cache=True):
         now = time.time()
@@ -693,7 +697,7 @@ class HomeWindow(xbmcgui.WindowXML):
             add = not info.get('in_watchlist')
             if data.watchlist_toggle(info['watchlist'], add):
                 info['in_watchlist'] = add
-                self._cache.pop(self._tab(TAB_WATCHLIST)['url'], None)
+                self._cache = {}
                 label = getString(30335 if add else 30334)
                 self.getControl(BUTTON_LIST).getListItem(position).setLabel(label)
                 xbmcgui.Dialog().notification(_g.__plugin__, getString(30358 if add else 30359), time=2000, sound=False)
@@ -794,7 +798,7 @@ class HomeWindow(xbmcgui.WindowXML):
 
     def _toggle_watchlist(self, item, add):
         if data.watchlist_toggle(item['watchlist'], add):
-            self._cache.pop(self._tab(TAB_WATCHLIST)['url'], None)
+            self._cache = {}
             xbmcgui.Dialog().notification(_g.__plugin__, getString(30358 if add else 30359), time=2000, sound=False)
             if not add and self._current_tab == TAB_WATCHLIST and not self._stack:
                 self._remember_focus()
