@@ -163,7 +163,8 @@ def tile_layout(list_id, focused, width, thumb_width, thumb_height, mask, subtit
     text_tile = is_kind(*TEXT_KINDS)
     # titles are part of most artworks, the label is shown below the focused tile and below
     # live channels; tiles without an image show their title inside
-    label_visible = '!' + text_tile + ' + String.IsEqual(ListItem.Property(tile),image)'
+    overlay = 'String.IsEqual(ListItem.Property(overlay),true)'
+    label_visible = '!' + text_tile + ' + String.IsEqual(ListItem.Property(tile),image) + !' + overlay
     if not subtitle:
         label_visible += ' + [%s | String.IsEqual(ListItem.Property(kind),station)]' % (has_focus if focused else 'false')
     labels = '''
@@ -249,6 +250,16 @@ def tile_layout(list_id, focused, width, thumb_width, thumb_height, mask, subtit
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>{pl}</left><top>{tt}</top><width>{pw}</width><height>{th}</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>{overlay} + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>{bl}</left><top>{bt}</top><width>{bw}</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -272,7 +283,7 @@ def tile_layout(list_id, focused, width, thumb_width, thumb_height, mask, subtit
             </control>
             {focus_ring}{labels}
         </control>'''.format(
-        zoom=zoom, focus_ring=focus_ring, labels=labels, mask=mask, text_tile=text_tile,
+        zoom=zoom, focus_ring=focus_ring, labels=labels, mask=mask, text_tile=text_tile, overlay=overlay,
         tl=THUMB_LEFT, tt=THUMB_TOP, tw=thumb_width, th=thumb_height,
         pl=THUMB_LEFT + 16, pw=thumb_width - 32,
         ll=THUMB_LEFT + thumb_width // 4, lt=THUMB_TOP + thumb_height // 4, lw=thumb_width // 2, lh=thumb_height // 2,

@@ -424,6 +424,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -452,7 +462,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image)</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true)</visible>
             </control>
             <control type="label">
                 <left>14</left><top>270</top><width>380</width><height>30</height>
@@ -525,6 +535,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -558,7 +578,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image)</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true)</visible>
             </control>
             <control type="label">
                 <left>14</left><top>270</top><width>380</width><height>30</height>
@@ -744,6 +764,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -772,7 +802,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -839,6 +869,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -872,7 +912,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(301) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(301) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -954,6 +994,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -982,7 +1032,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -1049,6 +1099,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1082,7 +1142,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(302) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(302) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -1164,6 +1224,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1192,7 +1262,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -1259,6 +1329,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1292,7 +1372,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(303) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(303) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -1374,6 +1454,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1402,7 +1492,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -1469,6 +1559,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1502,7 +1602,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(304) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(304) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -1584,6 +1684,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1612,7 +1722,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -1679,6 +1789,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1712,7 +1832,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(305) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(305) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -1794,6 +1914,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1822,7 +1952,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -1889,6 +2019,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -1922,7 +2062,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(306) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(306) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -2004,6 +2144,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -2032,7 +2182,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -2099,6 +2249,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -2132,7 +2292,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(307) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(307) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -2214,6 +2374,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -2242,7 +2412,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </itemlayout>
@@ -2309,6 +2479,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>352</width><height>216</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>212</top><width>356</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -2342,7 +2522,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(308) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(308) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                     </focusedlayout>
@@ -2421,6 +2601,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>304</width><height>189</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>185</top><width>308</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -2449,7 +2639,7 @@
                 <textcolor>FF8197A4</textcolor>
                 <scroll>false</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [false | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                 </itemlayout>
@@ -2516,6 +2706,16 @@
                 <label>&#x2039;  $INFO[ListItem.Label]</label>
                 <visible>String.IsEqual(ListItem.Property(kind),back)</visible>
             </control>
+            <control type="label">
+                <left>28</left><top>12</top><width>304</width><height>189</height>
+                <align>center</align><aligny>center</aligny>
+                <font>font30_title</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>AA000000</shadowcolor>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEqual(ListItem.Property(overlay),true) + String.IsEqual(ListItem.Property(tile),image)</visible>
+            </control>
             <control type="progress">
                 <left>26</left><top>185</top><width>308</width><height>6</height>
                 <texturebg colordiffuse="66FFFFFF">pv_white.png</texturebg>
@@ -2549,7 +2749,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
                 <label>$INFO[ListItem.Label]</label>
-                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + [Control.HasFocus(600) | String.IsEqual(ListItem.Property(kind),station)]</visible>
+                <visible>![String.IsEqual(ListItem.Property(kind),action) | String.IsEqual(ListItem.Property(kind),all) | String.IsEqual(ListItem.Property(kind),next) | String.IsEqual(ListItem.Property(kind),back)] + String.IsEqual(ListItem.Property(tile),image) + !String.IsEqual(ListItem.Property(overlay),true) + [Control.HasFocus(600) | String.IsEqual(ListItem.Property(kind),station)]</visible>
             </control>
         </control>
                 </focusedlayout>

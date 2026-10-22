@@ -123,6 +123,7 @@ def make_item(kind, label='', **kwargs):
         'more': None,
         'row_title': '',
         'action': '',
+        'overlay': False,
     }
     item.update(kwargs)
     return item
@@ -168,7 +169,9 @@ def parse_entity(entity):
     if widget == 'imagetextlink' or (not entity_type and link and not entity.get('titleID')):
         if not link:
             return None
-        return make_item(KIND_LINK, title, url=link, thumb=image(cover or hero), fanart=image(hero or cover, FANART_WIDTH), logo=logo)
+        # genres and collections only come with a background, the app writes their name on it
+        return make_item(KIND_LINK, title, url=link, thumb=image(cover or hero), fanart=image(hero or cover, FANART_WIDTH), logo=logo,
+                         plot=text(entity.get('synopsis')), overlay='overlayTextPosition' in entity)
 
     if not link and not entity.get('titleID'):
         return None

@@ -730,6 +730,7 @@ class HomeWindow(xbmcgui.WindowXML):
             'progress': str(item['progress']) if item['progress'] else '',
             'live': 'true' if item['kind'] == data.KIND_STATION else '',
             'logo': item['logo'],
+            'overlay': 'true' if item['overlay'] else '',
         }
         for key, value in properties.items():
             list_item.setProperty(key, value)
