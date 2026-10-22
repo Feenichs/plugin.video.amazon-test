@@ -4,12 +4,14 @@
 eine Oberfläche wie die Prime-Video-App auf Fire TV, gemacht für die Fernbedienung:
 
 - Tab-Leiste aus der Navigation von Prime Video (Startseite, Filme, Serien, Sport, Live-TV, Kategorien …),
-  dazu *Mein Bereich*, Suche und Konto
+  dazu *Kostenlos mit Werbung*, *Mein Bereich*, Suche und Konto; weitere Reihen laden beim Scrollen nach
 - Reihen mit Kacheln und große Vorschau des ausgewählten Titels (Bild, Titel-Logo, Jahr, Laufzeit, FSK,
   Prime-/Leih-Hinweis, Beschreibung), Fortschrittsbalken bei „Weiterschauen“, Live-Sender mit laufender Sendung
 - Detailseiten für Filme und Staffeln: Fortsetzen/von vorne, Trailer, Merkliste, Staffelwahl und Episoden
 - *Mein Bereich*: Merkliste sowie Käufe und Leihen, jeweils getrennt nach Filmen und Serien
-- Leihen und Kaufen direkt in Kodi, geschützt mit einer Kauf-PIN; die Bestätigung mit Preis kommt von Amazon
+- Leihen und Kaufen direkt in Kodi, geschützt mit der Eltern-PIN; die Bestätigung mit Preis kommt von Amazon
+- Kindersicherung: PIN-Abfrage ab einer wählbaren Altersfreigabe (FSK 6–18), eigene PINs für Kinder, die Titel
+  bis zu ihrer Altersstufe freigeben
 - „Kauf stornieren“, solange Amazon den Kauf als stornierbar meldet: ein QR-Code führt auf dem Handy zur
   Storno-Seite der Bestellung
 - Schnell: eine Anfrage pro Tab statt einer pro Titel, verkleinerte Bilder statt 4K-Originalen
@@ -24,8 +26,9 @@ melden keinen Fortschritt an Amazon; mehrere Abstürze und Hänger.
 **English:** This fork of Sandmann79's [Amazon VOD add-on](https://github.com/Sandmann79/xbmc) adds an interface
 like the Prime Video app on Fire TV, made for remote controls: a tab bar from the Prime Video navigation, rows of
 tiles with a large preview, detail pages with seasons and episodes, *My Stuff* (watchlist, purchases and rentals,
-split into movies and TV shows), renting and buying in Kodi protected by a purchase PIN, and a QR code to cancel
-a purchase on the phone while Amazon allows it. Pages are loaded as JSON, a tab needs a single request. It also
+split into movies and TV shows), a "Free with ads" tab, renting and buying in Kodi protected by the parents' PIN,
+parental controls with a PIN from a chosen age rating and own PINs for children, and a QR code to cancel a
+purchase on the phone while Amazon allows it. Pages are loaded as JSON, a tab needs a single request. It also
 fixes several bugs of the original; among others videos play in the best resolution Amazon allows instead of
 staying at e.g. 720x360.
 
