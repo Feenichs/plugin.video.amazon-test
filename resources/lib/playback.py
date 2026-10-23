@@ -418,6 +418,9 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
             return False
 
         licURL = getURLData('catalog/GetPlaybackResources', asin, devicetypeid=dtid, opt=req_param, extra=True, vMT=vMT, dRes='Widevine2License', retURL=True)
+        if not bypassproxy:
+            # through the proxy, which logs Amazon's reason when it refuses the license
+            licURL = f'http://{_s.proxyaddress}/lic/{quote_plus(licURL)}'
         skip = timecodes.get('skipElements')
         Log(f'Skip Items: {skip}', Log.DEBUG)
 
@@ -479,6 +482,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
         player.content = streamtype
         player.extern = extern
         player.resume_request = resume
+        player.path = mpd
         player.resolve(listitem)
 
         starttime = time.time()
@@ -681,9 +685,18 @@ class _AmazonPlayer(xbmc.Player):
         self.sendvp = _s.send_vp
         self.event = 'START'
         self.av_started = False
+        self.path = ''
 
     def onAVStarted(self):
-        self.av_started = True
+        # Only our own video counts: after a failed start another add-on (Spotify, YouTube) may start its own file
+        try:
+            playing = self.getPlayingFile()
+        except RuntimeError:
+            return
+        if playing == self.path or playing.startswith('plugin://plugin.video.amazon'):
+            self.av_started = True
+        else:
+            Log(f'Ignoring start of another file: {playing}', Log.DEBUG)
 
     def resolve(self, li):
         if self.resume_request >= 0:
