@@ -22,6 +22,7 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
     _representation_re = None
     _atmos_re = None
     _adaptation_set_re = None
+    _refused_licenses = {}  # license URL -> Amazon's refusal, answered locally when inputstream.adaptive asks again
     _purgeHeaders = [  # List of headers not to forward to the client
         'Transfer-Encoding',
         'Content-Encoding',
@@ -438,6 +439,11 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             self._SendResponse(status_code, headers, json.dumps({'error': {'errorCode': f'HTTP{status_code}', 'message': f'HTTP Error {status_code}'}}))
             return
 
+        # Collected to find out from which offers Amazon only licenses SD to devices without Widevine L1
+        rendition = content.get('returnedTitleRendition', {})
+        Log('[PS] Playback of {}: entitlement {}, quality {} {}'.format(
+            rendition.get('asin'), rendition.get('selectedEntitlement'), rendition.get('videoQuality'), rendition.get('videoResolution')))
+
         # Grab the subtitle urls, merge them in a single list, append the locale codes to let Kodi figure
         # out which URL has which language, then sort them neatly in a human digestible order.
         chosen_langs = getConfig('sub_langs', 'all').split(',')
@@ -494,6 +500,10 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
         """ Pass the Widevine license request through unchanged, log why Amazon refused it """
 
         # The challenge is sent as is: parsing it as form data would turn the + of base64 into spaces
+        # inputstream.adaptive keeps asking for about 30 seconds after a refusal, answer that at once
+        if endpoint in self._refused_licenses:
+            self._SendResponse(200, {'Content-Type': 'application/json'}, self._refused_licenses[endpoint])
+            return
         headers = {k: v for k, v in headers.items() if k.lower() != 'content-length'}
         status_code, headers, content = self._ForwardRequest('post', endpoint, headers, self.raw_data, use_auth=False)
         if status_code is None:
@@ -501,12 +511,16 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
         if 'widevine2License' not in content:
             Log(f'[PS] License request refused (HTTP {status_code}): {content[:2000]}', Log.ERROR)
             if 'HdContentNotAllowed' in content:
-                # Remember the title: playback restarts it in SD, and later plays it in SD right away
+                # Remember the title, so that it plays in SD right away from now on, and tell the
+                # waiting playback (playback.py) to stop and restart it in SD
                 from urllib.parse import urlparse, parse_qs
+                from xbmcgui import Window
+                self._refused_licenses[endpoint] = content
                 asin = parse_qs(urlparse(endpoint).query).get('asin', [''])[0]
                 sd_only = [a for a in getConfig('sd_only').split(',') if a]
                 if asin and asin not in sd_only:
                     writeConfig('sd_only', ','.join((sd_only + [asin])[-500:]))
+                Window(10000).setProperty('amazon.hd_refused', asin)
         self._SendResponse(status_code, headers, content)
 
     def _AlterMPD(self, endpoint, headers, data):

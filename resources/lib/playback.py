@@ -492,6 +492,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
         player.extern = extern
         player.resume_request = resume
         player.path = mpd
+        xbmcgui.Window(10000).clearProperty('amazon.hd_refused')
         player.resolve(listitem)
 
         starttime = time.time()
@@ -834,6 +835,12 @@ class _AmazonPlayer(xbmc.Player):
         deadline = time.time() + timeout
         while self.video_totaltime <= 0:
             if not self.running:
+                return
+            if xbmcgui.Window(10000).getProperty('amazon.hd_refused') == self.asin:
+                # The proxy saw Amazon refuse the HD license, playback restarts in SD (_IStreamPlayback)
+                Log(f'{msg}: HD license refused, stopping')
+                self.running = False
+                self.stop()
                 return
             if time.time() > deadline:
                 Log(f'{msg}: playback did not start within {timeout}s', Log.ERROR)
