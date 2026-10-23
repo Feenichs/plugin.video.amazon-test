@@ -751,7 +751,18 @@ class _AmazonPlayer(xbmc.Player):
             fp.close()
 
     def onPlayBackEnded(self):
+        self._failedBeforeStart()
         self.finished()
+
+    def onPlayBackError(self):
+        self._failedBeforeStart()
+
+    def _failedBeforeStart(self):
+        # Playback ended before the video started (e.g. no license): stop waiting for it, or getTimes would
+        # take the next file (e.g. the Spotify queue continuing) for this video and save its position as resume point
+        if not self.av_started and self.running:
+            Log('Playback ended before the video started', Log.ERROR)
+            self.running = False
 
     def onPlayBackStopped(self):
         self.finished()
@@ -789,6 +800,8 @@ class _AmazonPlayer(xbmc.Player):
         # Give up when playback never starts (e.g. a license error), instead of waiting forever
         deadline = time.time() + timeout
         while self.video_totaltime <= 0:
+            if not self.running:
+                return
             if time.time() > deadline:
                 Log(f'{msg}: playback did not start within {timeout}s', Log.ERROR)
                 self.running = False
