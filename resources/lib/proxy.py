@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler  # Python3 HTTP Server
 from socketserver import ThreadingTCPServer
 
 from resources.lib.logging import Log
-from .configs import getConfig
+from .configs import getConfig, writeConfig
 
 
 class ProxyHTTPD(BaseHTTPRequestHandler):
@@ -500,6 +500,13 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             return
         if 'widevine2License' not in content:
             Log(f'[PS] License request refused (HTTP {status_code}): {content[:2000]}', Log.ERROR)
+            if 'HdContentNotAllowed' in content:
+                # Remember the title: playback restarts it in SD, and later plays it in SD right away
+                from urllib.parse import urlparse, parse_qs
+                asin = parse_qs(urlparse(endpoint).query).get('asin', [''])[0]
+                sd_only = [a for a in getConfig('sd_only').split(',') if a]
+                if asin and asin not in sd_only:
+                    writeConfig('sd_only', ','.join((sd_only + [asin])[-500:]))
         self._SendResponse(status_code, headers, content)
 
     def _AlterMPD(self, endpoint, headers, data):
