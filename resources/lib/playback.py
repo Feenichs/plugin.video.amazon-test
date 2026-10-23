@@ -499,6 +499,10 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
 
         while (not _g.monitor.abortRequested()) and player.running:
             if player.isPlayingVideo():
+                if not player.isPlayingOwn():
+                    # replaced by another video: keep the position of ours as resume point
+                    player.finished()
+                    break
                 player.video_lastpos = player.getTime()
                 if time.time() > (starttime + player.interval):
                     starttime = time.time()
@@ -707,16 +711,20 @@ class _AmazonPlayer(xbmc.Player):
         self.av_started = False
         self.path = ''
 
-    def onAVStarted(self):
-        # Only our own video counts: after a failed start another add-on (Spotify, YouTube) may start its own file
+    def isPlayingOwn(self):
+        # Only our own video counts: after a failed start another add-on (Spotify, YouTube) may start its own
+        # file, and a title chosen next in the TV interface replaces ours without a stop event
         try:
             playing = self.getPlayingFile()
         except RuntimeError:
-            return
-        if playing == self.path or playing.startswith('plugin://plugin.video.amazon'):
+            return False
+        return playing == self.path or playing.startswith('plugin://plugin.video.amazon')
+
+    def onAVStarted(self):
+        if self.isPlayingOwn():
             self.av_started = True
         else:
-            Log(f'Ignoring start of another file: {playing}', Log.DEBUG)
+            Log('Ignoring start of another file', Log.DEBUG)
 
     def resolve(self, li):
         if self.resume_request >= 0:
