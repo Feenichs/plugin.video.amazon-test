@@ -394,7 +394,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -505,7 +505,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -718,6 +718,7 @@
                     <onup>301</onup>
                     <ondown>301</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -736,7 +737,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -841,7 +842,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -948,6 +949,7 @@
                     <onup>302</onup>
                     <ondown>302</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -966,7 +968,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1071,7 +1073,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1178,6 +1180,7 @@
                     <onup>303</onup>
                     <ondown>303</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -1196,7 +1199,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1301,7 +1304,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1408,6 +1411,7 @@
                     <onup>304</onup>
                     <ondown>304</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -1426,7 +1430,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1531,7 +1535,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1638,6 +1642,7 @@
                     <onup>305</onup>
                     <ondown>305</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -1656,7 +1661,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1761,7 +1766,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1868,6 +1873,7 @@
                     <onup>306</onup>
                     <ondown>306</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -1886,7 +1892,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -1991,7 +1997,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2098,6 +2104,7 @@
                     <onup>307</onup>
                     <ondown>307</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -2116,7 +2123,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2221,7 +2228,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2328,6 +2335,7 @@
                     <onup>308</onup>
                     <ondown>308</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -2346,7 +2354,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2451,7 +2459,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2558,6 +2566,7 @@
                     <onup>309</onup>
                     <ondown>309</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -2576,7 +2585,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2681,7 +2690,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2788,6 +2797,7 @@
                     <onup>310</onup>
                     <ondown>310</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -2806,7 +2816,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -2911,7 +2921,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3018,6 +3028,7 @@
                     <onup>311</onup>
                     <ondown>311</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -3036,7 +3047,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3141,7 +3152,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3248,6 +3259,7 @@
                     <onup>312</onup>
                     <ondown>312</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -3266,7 +3278,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3371,7 +3383,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3478,6 +3490,7 @@
                     <onup>313</onup>
                     <ondown>313</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -3496,7 +3509,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3601,7 +3614,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3708,6 +3721,7 @@
                     <onup>314</onup>
                     <ondown>314</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -3726,7 +3740,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3831,7 +3845,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -3938,6 +3952,7 @@
                     <onup>315</onup>
                     <ondown>315</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -3956,7 +3971,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4061,7 +4076,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4168,6 +4183,7 @@
                     <onup>316</onup>
                     <ondown>316</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -4186,7 +4202,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4291,7 +4307,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4398,6 +4414,7 @@
                     <onup>317</onup>
                     <ondown>317</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -4416,7 +4433,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4521,7 +4538,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4628,6 +4645,7 @@
                     <onup>318</onup>
                     <ondown>318</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -4646,7 +4664,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4751,7 +4769,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4858,6 +4876,7 @@
                     <onup>319</onup>
                     <ondown>319</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -4876,7 +4895,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -4981,7 +5000,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5088,6 +5107,7 @@
                     <onup>320</onup>
                     <ondown>320</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -5106,7 +5126,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5211,7 +5231,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5318,6 +5338,7 @@
                     <onup>321</onup>
                     <ondown>321</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -5336,7 +5357,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5441,7 +5462,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5548,6 +5569,7 @@
                     <onup>322</onup>
                     <ondown>322</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -5566,7 +5588,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5671,7 +5693,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5778,6 +5800,7 @@
                     <onup>323</onup>
                     <ondown>323</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -5796,7 +5819,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -5901,7 +5924,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6008,6 +6031,7 @@
                     <onup>324</onup>
                     <ondown>324</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -6026,7 +6050,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6131,7 +6155,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6238,6 +6262,7 @@
                     <onup>325</onup>
                     <ondown>325</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -6256,7 +6281,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6361,7 +6386,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6468,6 +6493,7 @@
                     <onup>326</onup>
                     <ondown>326</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -6486,7 +6512,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6591,7 +6617,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6698,6 +6724,7 @@
                     <onup>327</onup>
                     <ondown>327</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -6716,7 +6743,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6821,7 +6848,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -6928,6 +6955,7 @@
                     <onup>328</onup>
                     <ondown>328</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -6946,7 +6974,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -7051,7 +7079,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -7158,6 +7186,7 @@
                     <onup>329</onup>
                     <ondown>329</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -7176,7 +7205,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -7281,7 +7310,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -7388,6 +7417,7 @@
                     <onup>330</onup>
                     <ondown>330</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="410" height="278">
         <control type="group">
             
@@ -7406,7 +7436,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -7511,7 +7541,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>384</width><height>216</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>108</left><top>66</top><width>192</width><height>108</height>
@@ -7614,7 +7644,10 @@
                 <left>68</left><top>180</top><width>1820</width><height>900</height>
                 <orientation>vertical</orientation>
                 <onup>100</onup>
+                <onright>602</onright>
+                <pagecontrol>601</pagecontrol>
                 <scrolltime tween="sine">250</scrolltime>
+                <preloaditems>2</preloaditems>
                 <itemlayout width="360" height="251">
         <control type="group">
             
@@ -7633,7 +7666,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>336</width><height>189</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask_grid.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask_grid.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>96</left><top>59</top><width>168</width><height>94</height>
@@ -7738,7 +7771,7 @@
                 <control type="image">
                     <left>12</left><top>12</top><width>336</width><height>189</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="pv_mask_grid.png" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="pv_mask_grid.png" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>96</left><top>59</top><width>168</width><height>94</height>
@@ -7830,6 +7863,25 @@
             </control>
         </control>
                 </focusedlayout>
+            </control>
+            <control type="button" id="602">
+                <left>1870</left><top>190</top><width>48</width><height>880</height>
+                <texturefocus>-</texturefocus>
+                <texturenofocus>-</texturenofocus>
+                <onleft>600</onleft>
+                <visible>Container(600).HasNext | Container(600).HasPrevious</visible>
+            </control>
+            <control type="scrollbar" id="601">
+                <left>1890</left><top>190</top><width>8</width><height>880</height>
+                <texturesliderbackground colordiffuse="00FFFFFF">pv_white.png</texturesliderbackground>
+                <texturesliderbar border="4" colordiffuse="FF1A98FF">pv_scroll.png</texturesliderbar>
+                <texturesliderbarfocus border="4" colordiffuse="FF1A98FF">pv_scroll.png</texturesliderbarfocus>
+                <textureslidernib>-</textureslidernib>
+                <textureslidernibfocus>-</textureslidernibfocus>
+                <orientation>vertical</orientation>
+                <showonepage>false</showonepage>
+                <onleft>600</onleft>
+                <animation effect="fade" start="100" end="50" time="150" condition="!Control.HasFocus(602)">Conditional</animation>
             </control>
         </control>
 

@@ -117,10 +117,11 @@ def generate_textures():
         os.makedirs(MEDIA)
     r, g, b = BACKGROUND_RGB
     write_png(os.path.join(MEDIA, 'pv_white.png'), 8, 8, lambda x, y: (255, 255, 255, 255))
-    # 9-slice textures, used with border="12" / border="28" / border="16"
+    # 9-slice textures, used with border="12" / border="28" / border="16" / border="4"
     write_png(os.path.join(MEDIA, 'pv_rounded.png'), 64, 64, rounded(64, 64, 10))
     write_png(os.path.join(MEDIA, 'pv_pill.png'), 64, 64, rounded(64, 64, 31))
     write_png(os.path.join(MEDIA, 'pv_focus.png'), 64, 64, rounded(64, 64, 14, outline=4))
+    write_png(os.path.join(MEDIA, 'pv_scroll.png'), 8, 32, rounded(8, 32, 4))
     # alpha masks for rounded 16:9 thumbnails
     write_png(os.path.join(MEDIA, 'pv_mask.png'), THUMB_WIDTH, THUMB_HEIGHT, rounded(THUMB_WIDTH, THUMB_HEIGHT, 10))
     write_png(os.path.join(MEDIA, 'pv_mask_grid.png'), GRID_THUMB_WIDTH, GRID_THUMB_HEIGHT,
@@ -205,7 +206,7 @@ def tile_layout(list_id, focused, width, thumb_width, thumb_height, mask, subtit
                 <control type="image">
                     <left>{tl}</left><top>{tt}</top><width>{tw}</width><height>{th}</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="{mask}" colordiffuse="FF666666">$INFO[ListItem.Art(fanart)]</texture>
+                    <texture background="true" diffuse="{mask}" colordiffuse="FF666666">$INFO[ListItem.Art(landscape)]</texture>
                 </control>
                 <control type="image">
                     <left>{ll}</left><top>{lt}</top><width>{lw}</width><height>{lh}</height>
@@ -293,6 +294,37 @@ def tile_layout(list_id, focused, width, thumb_width, thumb_height, mask, subtit
     )
 
 
+def scrollbar(control_id, list_id, handle_id, left, top, height):
+    """
+    A slider beside a long list, like in the Kodi menus. It is only a short
+    blue line without a track, its length shows the visible part. Right
+    moves to an invisible button beside it, Up and Down on that button move
+    the list by rows (see HomeWindow._scroll), not every remote has page
+    keys. The scrollbar itself only pages, it is left to the mouse.
+    """
+    return '''
+            <control type="button" id="{handle_id}">
+                <left>{handle_left}</left><top>{top}</top><width>48</width><height>{height}</height>
+                <texturefocus>-</texturefocus>
+                <texturenofocus>-</texturenofocus>
+                <onleft>{list_id}</onleft>
+                <visible>Container({list_id}).HasNext | Container({list_id}).HasPrevious</visible>
+            </control>
+            <control type="scrollbar" id="{control_id}">
+                <left>{left}</left><top>{top}</top><width>8</width><height>{height}</height>
+                <texturesliderbackground colordiffuse="00FFFFFF">pv_white.png</texturesliderbackground>
+                <texturesliderbar border="4" colordiffuse="{accent}">pv_scroll.png</texturesliderbar>
+                <texturesliderbarfocus border="4" colordiffuse="{accent}">pv_scroll.png</texturesliderbarfocus>
+                <textureslidernib>-</textureslidernib>
+                <textureslidernibfocus>-</textureslidernibfocus>
+                <orientation>vertical</orientation>
+                <showonepage>false</showonepage>
+                <onleft>{list_id}</onleft>
+                <animation effect="fade" start="100" end="50" time="150" condition="!Control.HasFocus({handle_id})">Conditional</animation>
+            </control>'''.format(control_id=control_id, list_id=list_id, handle_id=handle_id, handle_left=left - 20,
+                                  left=left, top=top, height=height, accent=ACCENT)
+
+
 def row(index):
     list_id = 301 + index
     return '''
@@ -309,6 +341,7 @@ def row(index):
                     <onup>{list_id}</onup>
                     <ondown>{list_id}</ondown>
                     <scrolltime tween="sine">200</scrolltime>
+                    <preloaditems>2</preloaditems>
                     <itemlayout width="{tile_width}" height="{tile_height}">{item}
                     </itemlayout>
                     <focusedlayout width="{tile_width}" height="{tile_height}">{focused}
@@ -664,12 +697,15 @@ WINDOW_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
                 <left>68</left><top>180</top><width>1820</width><height>900</height>
                 <orientation>vertical</orientation>
                 <onup>100</onup>
+                <onright>602</onright>
+                <pagecontrol>601</pagecontrol>
                 <scrolltime tween="sine">250</scrolltime>
+                <preloaditems>2</preloaditems>
                 <itemlayout width="{grid_width}" height="{grid_height}">{grid_item}
                 </itemlayout>
                 <focusedlayout width="{grid_width}" height="{grid_height}">{grid_focused}
                 </focusedlayout>
-            </control>
+            </control>{grid_scrollbar}
         </control>
 
         <!-- Status -->
@@ -731,6 +767,7 @@ def generate_window():
         grid_width=GRID_TILE_WIDTH, grid_height=GRID_TILE_HEIGHT,
         grid_item=tile_layout(600, False, GRID_TILE_WIDTH, GRID_THUMB_WIDTH, GRID_THUMB_HEIGHT, 'pv_mask_grid.png'),
         grid_focused=tile_layout(600, True, GRID_TILE_WIDTH, GRID_THUMB_WIDTH, GRID_THUMB_HEIGHT, 'pv_mask_grid.png'),
+        grid_scrollbar=scrollbar(601, 600, 602, 1890, 190, 880),
         loading=localize(30328),
         empty=localize(30329),
     )

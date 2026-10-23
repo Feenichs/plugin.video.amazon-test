@@ -9,7 +9,9 @@ import json
 import os
 import threading
 import time
+from collections import deque
 from urllib.parse import urlencode
+from urllib.request import urlopen
 
 import xbmc
 import xbmcgui
@@ -43,13 +45,18 @@ ROW_GROUPS = tuple(range(501, 501 + NUM_ROWS))
 # load the next rows of a page when the focus is this close to the last row
 MORE_ROWS_AHEAD = 3
 GRID_PANEL = 600
+GRID_COLUMNS = 5
+# invisible button beside the slider of the grid
+GRID_SCROLL_HANDLE = 602
 BUTTON_LIST = 700
 SEASON_LIST = 710
 EPISODE_LIST = 720
 DETAIL_LISTS = (BUTTON_LIST, SEASON_LIST, EPISODE_LIST)
 
 CACHE_SECONDS = 300
-GRID_PAGE_SIZE = 30
+# tiles per grid page, independent of the page size of the listings,
+# a multiple of the columns of the grid
+GRID_PAGE_TILES = 100
 TAB_SWITCH_DELAY = 0.35
 PLAYBACK_END_DELAY = 3
 WINDOW_PROPERTY = 'amazon_home_window'
@@ -59,6 +66,23 @@ TAB_FREE_WITH_ADS = 'freewithads'
 FREE_WITH_ADS_URL = '/gp/video/storefront/home/freetv?jic=36%7CCgtmcmVld2l0aGFkcxIMc3Vic2NyaXB0aW9u'
 TAB_SEARCH = 'search'
 TAB_ACCOUNT = 'account'
+
+
+def _grid_page_range(page):
+    """
+    Range of the items shown on a grid page. A page has GRID_PAGE_TILES
+    tiles including the tiles to the previous and the next page, so that
+    all rows are full except on the last page.
+    """
+    if page == 1:
+        return 0, GRID_PAGE_TILES - 1
+    size = GRID_PAGE_TILES - 2
+    start = GRID_PAGE_TILES - 1 + (page - 2) * size
+    return start, start + size
+
+
+def _tile_image(item):
+    return item['thumb'] or item['fanart']
 
 
 def _format_time(seconds):
@@ -93,6 +117,7 @@ class HomeWindow(xbmcgui.WindowXML):
         self._refresh_pending = False
         self._window_id = None
         self._player = _PlayerEvents(self._on_playback_end)
+        self._warmer = _ImageWarmer()
 
     # Kodi callbacks
 
@@ -131,6 +156,10 @@ class HomeWindow(xbmcgui.WindowXML):
                 xbmcgui.Dialog().textviewer(item['label'], item['plot'])
             return
 
+        if focus_id == GRID_SCROLL_HANDLE and action_id in (ACTION_MOVE_UP, ACTION_MOVE_DOWN):
+            self._scroll(down=action_id == ACTION_MOVE_DOWN)
+            return
+
         if focus_id == NAV_LIST and action_id in (ACTION_MOVE_LEFT, ACTION_MOVE_RIGHT):
             self._schedule_tab_switch()
             return
@@ -149,7 +178,7 @@ class HomeWindow(xbmcgui.WindowXML):
 
         if focus_id == GRID_PANEL and action_id == ACTION_MOVE_UP:
             # the panel moves up by itself, only leave it from the first line
-            if self.getControl(GRID_PANEL).getSelectedPosition() < 4:
+            if self.getControl(GRID_PANEL).getSelectedPosition() < GRID_COLUMNS:
                 self.setFocusId(NAV_LIST)
 
     def onClick(self, control_id):
@@ -168,6 +197,16 @@ class HomeWindow(xbmcgui.WindowXML):
 
     # Navigation
 
+    def _scroll(self, down):
+        """Move the grid beside the slider by one row"""
+        control = self.getControl(GRID_PANEL)
+        position = control.getSelectedPosition()
+        if not down and position < GRID_COLUMNS:
+            self.setFocusId(NAV_LIST)
+            return
+        target = position + GRID_COLUMNS if down else position - GRID_COLUMNS
+        control.selectItem(min(target, control.size() - 1))
+
     def _on_back(self, focus_id):
         if self._stack:
             self._close_view()
@@ -180,6 +219,7 @@ class HomeWindow(xbmcgui.WindowXML):
 
     def close_window(self):
         self._closing = True
+        self._warmer.stop()
         with self._lock:
             self._generation += 1
         if self._tab_timer:
@@ -500,6 +540,7 @@ class HomeWindow(xbmcgui.WindowXML):
         control = self.getControl(list_id)
         control.reset()
         control.addItems([self._make_listitem(item) for item in items])
+        self._warmer.add([_tile_image(item) for item in items])
         self.getControl(ROW_LABELS[index]).setLabel(title or '')
         self._row_data[list_id] = items
         self.getControl(ROW_GROUPS[index]).setVisible(index >= self._row_offset)
@@ -586,8 +627,7 @@ class HomeWindow(xbmcgui.WindowXML):
         self._grid = {'items': []}
 
         def _run():
-            start = (page - 1) * GRID_PAGE_SIZE
-            end = start + GRID_PAGE_SIZE
+            start, end = _grid_page_range(page)
             if not self._load_source(source, end + 1, generation):
                 return
             items = source['items'][start:end]
@@ -600,6 +640,7 @@ class HomeWindow(xbmcgui.WindowXML):
                     return
                 self._grid['items'] = items
                 panel.addItems([self._make_listitem(item) for item in items])
+                self._warmer.add([_tile_image(item) for item in items], first=True)
                 self.setProperty('loading', '')
                 if not source['items']:
                     self.setProperty('empty', 'true')
@@ -795,8 +836,14 @@ class HomeWindow(xbmcgui.WindowXML):
 
     def _make_listitem(self, item):
         list_item = xbmcgui.ListItem(label=item['label'], label2=item['subtitle'], offscreen=True)
-        thumb = item['thumb'] or item['fanart']
-        list_item.setArt({'thumb': thumb, 'icon': thumb, 'fanart': item['fanart'] or thumb, 'clearlogo': item['logo']})
+        thumb = _tile_image(item)
+        # Kodi loads the images of hidden controls in the tiles too, so the
+        # layer of live channels gets its own art: with the fanart every tile
+        # loaded a 1920 px image besides its thumbnail. The thumbnail of a
+        # channel is the image of the running programme if there is one.
+        landscape = item['thumb'] if item['kind'] == data.KIND_STATION and item['fanart'] else ''
+        list_item.setArt({'thumb': thumb, 'icon': thumb, 'fanart': item['fanart'] or thumb, 'landscape': landscape,
+                          'clearlogo': item['logo']})
         properties = {
             'kind': item['kind'],
             'tile': 'image' if thumb else 'text',
@@ -1010,6 +1057,59 @@ class HomeWindow(xbmcgui.WindowXML):
         thread.daemon = True
         thread.start()
         return thread
+
+
+class _ImageWarmer(object):
+    """
+    Requests the images of tiles before Kodi shows them. Amazon composes the
+    tile images (cover, gradient and logo) on the first request, which takes
+    0.5 to 2.5 s per image, afterwards its CDN answers within 0.1 s. Kodi
+    loads only the images of the visible tiles, so without this every tile
+    scrolled into view waited for Amazon. The images are only requested,
+    Kodi still loads and caches them itself.
+    """
+    WORKERS = 6
+    TIMEOUT = 20
+
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._queue = deque()
+        self._requested = set()
+        self._workers = 0
+        self._stopped = False
+
+    def add(self, urls, first=False):
+        """ Queue urls, first=True puts them before the queued ones (the grid before the rows) """
+        with self._lock:
+            new = [url for url in dict.fromkeys(urls) if url and url.startswith('http') and url not in self._requested]
+            self._requested.update(new)
+            if first:
+                self._queue.extendleft(reversed(new))
+            else:
+                self._queue.extend(new)
+            while self._workers < self.WORKERS and self._queue and not self._stopped:
+                self._workers += 1
+                thread = threading.Thread(target=self._run)
+                thread.daemon = True
+                thread.start()
+
+    def stop(self):
+        with self._lock:
+            self._stopped = True
+            self._queue.clear()
+
+    def _run(self):
+        while True:
+            with self._lock:
+                if self._stopped or not self._queue:
+                    self._workers -= 1
+                    return
+                url = self._queue.popleft()
+            try:
+                with urlopen(url, timeout=self.TIMEOUT) as response:
+                    response.read()
+            except Exception:
+                pass
 
 
 class _PlayerEvents(xbmc.Player):
