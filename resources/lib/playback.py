@@ -387,11 +387,8 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
         vMT = ['Feature', 'Trailer', 'LiveStreaming'][streamtype]
         dRes = 'PlaybackUrls' if streamtype > 1 else 'PlaybackUrls,SubtitleUrls,ForcedNarratives,TransitionTimecodes'
         opt = '&liveManifestType=accumulating,live&playerType=xp&playerAttributes={"frameRate":"HFR"}&deviceFrameRateOverride=High' if streamtype > 1 else ''
-        # Amazon refuses the HD license of some titles (e.g. "Free with ads") to devices without Widevine L1
-        sd_only = not _s.wvl1_device and asin in getConfig('sd_only').split(',')
-        if sd_only:
-            Log(f'{asin} only plays in SD on this device')
-            opt += '&deviceVideoQualityOverride=SD'
+        # Without Widevine L1 Amazon only licenses SD (getURLData requests it), trailers aren't encrypted
+        sd_only = not _s.wvl1_device and streamtype != 1
 
         inputstream_helper = Helper('mpd', drm='com.widevine.alpha')
         if not inputstream_helper.check_inputstream():
@@ -423,8 +420,6 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
             return False
 
         licURL = getURLData('catalog/GetPlaybackResources', asin, devicetypeid=dtid, opt=req_param, extra=True, vMT=vMT, dRes='Widevine2License', retURL=True)
-        if sd_only:
-            licURL += '&deviceVideoQualityOverride=SD'
         if not bypassproxy:
             # through the proxy, which logs Amazon's reason when it refuses the license
             licURL = f'http://{_s.proxyaddress}/lic/{quote_plus(licURL)}'
@@ -519,13 +514,6 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
             _g.monitor.waitForAbort(1)
         skip_button.hide()
         player.finished(True)
-        if not player.av_started and not sd_only and not _s.wvl1_device and asin in getConfig('sd_only').split(','):
-            # The proxy saw Amazon refuse the HD license: start again in SD at the same position
-            Log(f'HD license refused for {asin}, restarting in SD')
-            xbmcgui.Window(10000).setProperty('amazon.sd_retry', asin)
-            query = urlencode({'mode': 'PlayVideo', 'asin': asin, 'name': name, 'adult': adultstr, 'trailer': streamtype,
-                               'selbitrate': '0', 'resume': player.resume, 'rating': rating or ''})
-            xbmc.executebuiltin(f'PlayMedia({_g.pluginid}?{query})')
         del player, skip_button
         return True
 
@@ -554,11 +542,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
     from .parental import may_play
     if rating is None:
         rating = _getListItem('MPAA') or ('18' if isAdult else '')
-    # the automatic restart in SD (see _IStreamPlayback) was already allowed, don't ask for the PIN again
-    window = xbmcgui.Window(10000)
-    sd_retry = window.getProperty('amazon.sd_retry') == asin
-    window.clearProperty('amazon.sd_retry')
-    if not sd_retry and not may_play(rating, name or _getListItem('Label')):
+    if not may_play(rating, name or _getListItem('Label')):
         xbmcplugin.setResolvedUrl(_g.pluginhandle, False, xbmcgui.ListItem())
         return
     amazonUrl = _g.BaseUrl + "/dp/" + (name if _g.UsePrimeVideo else asin)

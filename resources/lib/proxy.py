@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler  # Python3 HTTP Server
 from socketserver import ThreadingTCPServer
 
 from resources.lib.logging import Log
-from .configs import getConfig, writeConfig
+from .configs import getConfig
 
 
 class ProxyHTTPD(BaseHTTPRequestHandler):
@@ -439,11 +439,6 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             self._SendResponse(status_code, headers, json.dumps({'error': {'errorCode': f'HTTP{status_code}', 'message': f'HTTP Error {status_code}'}}))
             return
 
-        # Collected to find out from which offers Amazon only licenses SD to devices without Widevine L1
-        rendition = content.get('returnedTitleRendition', {})
-        Log('[PS] Playback of {}: entitlement {}, quality {} {}'.format(
-            rendition.get('asin'), rendition.get('selectedEntitlement'), rendition.get('videoQuality'), rendition.get('videoResolution')))
-
         # Grab the subtitle urls, merge them in a single list, append the locale codes to let Kodi figure
         # out which URL has which language, then sort them neatly in a human digestible order.
         chosen_langs = getConfig('sub_langs', 'all').split(',')
@@ -501,8 +496,8 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
 
         # The challenge is sent as is: parsing it as form data would turn the + of base64 into spaces
         # inputstream.adaptive asks again about 90 times after a refusal, answer them at once so that it
-        # gives up quickly and playback restarts in SD (playback.py). Stopping the player from Python instead
-        # deadlocks Kodi: it waits for inputstream.adaptive, which waits for this proxy.
+        # gives up quickly. Stopping the player from Python instead deadlocks Kodi: it waits for
+        # inputstream.adaptive, which waits for this proxy.
         if endpoint in self._refused_licenses:
             self._SendResponse(200, {'Content-Type': 'application/json'}, self._refused_licenses[endpoint])
             return
@@ -513,13 +508,7 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
         if 'widevine2License' not in content:
             Log(f'[PS] License request refused (HTTP {status_code}): {content[:2000]}', Log.ERROR)
             if 'HdContentNotAllowed' in content:
-                # Remember the title: playback restarts it in SD, and later plays it in SD right away
-                from urllib.parse import urlparse, parse_qs
                 self._refused_licenses[endpoint] = content
-                asin = parse_qs(urlparse(endpoint).query).get('asin', [''])[0]
-                sd_only = [a for a in getConfig('sd_only').split(',') if a]
-                if asin and asin not in sd_only:
-                    writeConfig('sd_only', ','.join((sd_only + [asin])[-500:]))
         self._SendResponse(status_code, headers, content)
 
     def _AlterMPD(self, endpoint, headers, data):
