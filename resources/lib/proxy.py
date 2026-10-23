@@ -500,7 +500,9 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
         """ Pass the Widevine license request through unchanged, log why Amazon refused it """
 
         # The challenge is sent as is: parsing it as form data would turn the + of base64 into spaces
-        # inputstream.adaptive keeps asking for about 30 seconds after a refusal, answer that at once
+        # inputstream.adaptive asks again about 90 times after a refusal, answer them at once so that it
+        # gives up quickly and playback restarts in SD (playback.py). Stopping the player from Python instead
+        # deadlocks Kodi: it waits for inputstream.adaptive, which waits for this proxy.
         if endpoint in self._refused_licenses:
             self._SendResponse(200, {'Content-Type': 'application/json'}, self._refused_licenses[endpoint])
             return
@@ -511,16 +513,13 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
         if 'widevine2License' not in content:
             Log(f'[PS] License request refused (HTTP {status_code}): {content[:2000]}', Log.ERROR)
             if 'HdContentNotAllowed' in content:
-                # Remember the title, so that it plays in SD right away from now on, and tell the
-                # waiting playback (playback.py) to stop and restart it in SD
+                # Remember the title: playback restarts it in SD, and later plays it in SD right away
                 from urllib.parse import urlparse, parse_qs
-                from xbmcgui import Window
                 self._refused_licenses[endpoint] = content
                 asin = parse_qs(urlparse(endpoint).query).get('asin', [''])[0]
                 sd_only = [a for a in getConfig('sd_only').split(',') if a]
                 if asin and asin not in sd_only:
                     writeConfig('sd_only', ','.join((sd_only + [asin])[-500:]))
-                Window(10000).setProperty('amazon.hd_refused', asin)
         self._SendResponse(status_code, headers, content)
 
     def _AlterMPD(self, endpoint, headers, data):
