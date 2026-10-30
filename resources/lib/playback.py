@@ -388,7 +388,7 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
         dRes = 'PlaybackUrls' if streamtype > 1 else 'PlaybackUrls,SubtitleUrls,ForcedNarratives,TransitionTimecodes'
         opt = '&liveManifestType=accumulating,live&playerType=xp&playerAttributes={"frameRate":"HFR"}&deviceFrameRateOverride=High' if streamtype > 1 else ''
         # Without Widevine L1 Amazon only licenses SD (getURLData requests it), trailers aren't encrypted
-        sd_only = not _s.wvl1_device and streamtype != 1
+        sd_only = not _s.wvl1_device and streamtype != 1 and not _s.l3_request_hd
 
         inputstream_helper = Helper('mpd', drm='com.widevine.alpha')
         if not inputstream_helper.check_inputstream():
@@ -444,6 +444,8 @@ def PlayVideo(name, asin, adultstr, streamtype, forcefb=0, resume=-1, rating=Non
             title = name
 
         Log(f'Using {_g.is_addon} Version: {is_version}')
+        if streamtype == 0 and not _s.wvl1_device:
+            Log('No Widevine L1: ' + ('requesting HD, the license may be refused' if _s.l3_request_hd else 'requesting SD'))
 
         listitem = xbmcgui.ListItem(label=title, path=mpd)
         if (_g.KodiVersion < 21) and ('adaptive' in _g.is_addon):

@@ -14,6 +14,7 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'  # Allow keep-alive
     server_version = 'AmazonVOD/0.1'
     sessions = {}  # Keep-Alive sessions
+    _refused_licenses = {}  # license URL -> Amazon's refusal, answered locally when inputstream.adaptive asks again
     _min_audio_keep_bitrate = 192000
     _log_audio_selection_details = False
     _host_re = None
@@ -22,7 +23,6 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
     _representation_re = None
     _atmos_re = None
     _adaptation_set_re = None
-    _refused_licenses = {}  # license URL -> Amazon's refusal, answered locally when inputstream.adaptive asks again
     _purgeHeaders = [  # List of headers not to forward to the client
         'Transfer-Encoding',
         'Content-Encoding',
