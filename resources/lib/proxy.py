@@ -72,7 +72,11 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
         headers = {k: self.headers[k] for k in self.headers if k not in ['host', 'content-length']}
         data_length = self.headers.get('content-length')
         self.raw_data = self.rfile.read(int(data_length)) if data_length else None
-        data = {k: v for k, v in parse_qsl(self.raw_data)} if self.raw_data else None
+        try:
+            data = {k: v for k, v in parse_qsl(self.raw_data)} if self.raw_data else None
+        except UnicodeDecodeError:
+            # binary body (raw Widevine challenge of the web player license), Python 3.8 fails to read it as form data
+            data = None
         return path, headers, data
 
     def _ForwardRequest(self, method, endpoint, headers, data, stream=False, use_auth=True):
