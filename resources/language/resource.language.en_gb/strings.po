@@ -972,6 +972,13 @@ msgctxt "#30312"
 msgid "Adaptive (inputstream.adaptive)"
 msgstr ""
 
+msgctxt "#30313"
+msgid "Use the web player interface without Widevine L1 (up to 960x540 instead of SD)"
+msgstr ""
+
+
+
+
 msgctxt "#30320"
 msgid "TV interface"
 msgstr ""

@@ -51,8 +51,10 @@ update of the original add-on; disable automatic updates for the add-on to keep 
 ## Notes
 
 - **Video quality:** Amazon only gives HD and UHD keys to devices certified for Widevine L1 (Fire TV, Shield,
-  smart TVs, …). Kodi on PC hardware (LibreELEC on x86, Windows) has Widevine L3 and gets SD for movies and series;
-  trailers are not encrypted and play in full HD.
+  smart TVs, …). Kodi on PC hardware (LibreELEC on x86, Windows) has Widevine L3. On L3 the add-on plays movies and
+  series through the interface of the Prime Video web player, like a Linux browser: 960x540 with Dolby Digital Plus
+  5.1, instead of 640x360 through the classic interface (setting "Use the web player interface without Widevine L1").
+  720p and more stay refused, the L3 CDM cannot prove HDCP. Trailers are not encrypted and play in full HD.
 - **Cancelling:** on amazon.de Amazon refused cancellations sent with the add-on's login, so the add-on shows a QR
   code for the browser instead. Amazon may answer "We're unable to process the withdrawal" even if a cancellation
   succeeds.

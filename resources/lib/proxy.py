@@ -159,6 +159,8 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             self._AlterGPR(unquote(path[1]), headers, data)
         elif ('lic' == path[0]) and (2 == len(path)):
             self._ForwardLicense(unquote(path[1]), headers)
+        elif ('wvlic' == path[0]) and (2 == len(path)):
+            self._ForwardWebLicense(unquote(path[1]), headers)
         else:
             Log('[PS] Invalid request received', Log.DEBUG)
             self.send_error(501, 'Invalid request')
@@ -172,6 +174,9 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
 
         if ('mpd' == path[0]) and (2 == len(path)):
             self._AlterMPD(unquote(path[1]), headers, data)
+        elif ('mpd' == path[0]) and (3 == len(path)):
+            # web player manifest plus the Dolby audio of the unfiltered manifest
+            self._AlterMPD(unquote(path[1]), headers, data, extra_audio=unquote(path[2]))
         elif ('subtitles' == path[0]) and (3 == len(path)):
             self._TranscodeSubtitle(unquote(path[1]), headers, data, path[2])
         else:
@@ -509,9 +514,53 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             Log(f'[PS] License request refused (HTTP {status_code}): {content[:2000]}', Log.ERROR)
             if 'HdContentNotAllowed' in content:
                 self._refused_licenses[endpoint] = content
+        else:
+            import re
+            hdcp = re.search(r'"hdcpEnforcementResolutionPixels"\s*:\s*(\d+)', content)
+            Log('[PS] License granted' + (f', HDCP from {hdcp.group(1)} pixels' if hdcp else ''), Log.INFO)
         self._SendResponse(status_code, headers, content)
 
-    def _AlterMPD(self, endpoint, headers, data):
+    def _ForwardWebLicense(self, endpoint, headers):
+        """ License through the web player API (webplayback.py), wraps the raw challenge into its JSON body """
+        import json
+        from base64 import b64encode, b64decode
+
+        lower = {k.lower(): k for k in headers}
+        envelope = headers.pop(lower.get('x-pv-envelope', ''), None)
+        handoff = headers.pop(lower.get('x-pv-handoff', ''), None)
+        cache_key = f'{endpoint}#{handoff}'
+        if cache_key in self._refused_licenses:
+            self._SendResponse(403, {'Content-Type': 'application/json'}, self._refused_licenses[cache_key])
+            return
+        headers = {k: v for k, v in headers.items() if k.lower() not in ('content-length', 'content-type')}
+        headers['Content-Type'] = 'text/plain;charset=UTF-8'
+        challenge = self.raw_data or b''
+        Log(f'[PS] Web license request, challenge {len(challenge)} bytes, envelope {"yes" if envelope else "no"}, handoff {"yes" if handoff else "no"}', Log.DEBUG)
+        body = json.dumps({'includeHdcpTestKey': True, 'playbackEnvelope': envelope, 'sessionHandoffToken': handoff,
+                           'licenseChallenge': b64encode(challenge).decode('ascii')})
+        status_code, rheaders, content = self._ForwardRequest('post', endpoint, headers, body, use_auth=False)
+        if status_code is None:
+            return
+        try:
+            lic = json.loads(content).get('widevineLicense') or {}
+        except ValueError:
+            lic = {}
+        if not lic.get('license'):
+            Log(f'[PS] Web license refused (HTTP {status_code}): {content[:2000]}', Log.ERROR)
+            self._refused_licenses[cache_key] = content
+            self._SendResponse(403, {'Content-Type': 'application/json'}, content)
+            return
+        keys = [(k.get('keyType'), (k.get('cdmUsageLevel') or '').replace('CDM_LEVEL_', ''), (k.get('hdcp') or {}).get('hdcp'))
+                for k in (lic.get('metadata') or {}).get('keyMetadata', [])]
+        Log(f'[PS] Web license granted, keys {keys}', Log.INFO)
+        data = b64decode(lic['license'])
+        try:
+            self._SendHeaders(200, {'Content-Type': 'application/octet-stream', 'Content-Length': len(data), 'Connection': 'Keep-Alive'})
+            self.wfile.write(data)
+        except OSError as exc:
+            Log(f'[PS] Client disconnected while sending the license: {exc}', Log.DEBUG)
+
+    def _AlterMPD(self, endpoint, headers, data, extra_audio=None):
         """ MPD alteration for better language parsing """
         import re
         from urllib.parse import urlparse
@@ -531,11 +580,13 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             if r.encoding is None:
                 r.encoding = 'utf-8'
             mpd = r.content.decode(r.encoding, errors='replace')
+            if extra_audio:
+                mpd = self._InjectAudio(mpd, extra_audio)
 
             def _rebase(data):
                 data = re.sub(r'<Role\b[^>]*/>', '', data)
                 data = re.sub(r'<Role\b[^>]*>.*?</Role>', '', data, flags=re.DOTALL)
-                data = data.replace('<BaseURL>', '<BaseURL>' + baseurl)
+                data = re.sub(r'<BaseURL>(?![a-z]+://)', '<BaseURL>' + baseurl, data)
                 data = re.sub(r'(<SegmentTemplate\b[^>]*\bmedia=")(?![a-z]+:|//|/)', r'\1' + baseurl, data)
                 data = re.sub(r'(<SegmentTemplate\b[^>]*\binitialization=")(?![a-z]+:|//|/)', r'\1' + baseurl, data)
                 data = re.sub(r'(<SegmentTemplate\b[^>]*\bmedia=")/', r'\1' + rooturl + '/', data)
@@ -561,6 +612,44 @@ class ProxyHTTPD(BaseHTTPRequestHandler):
             if r.encoding is None:
                 r.encoding = 'utf-8'
             self._SendResponse(status_code, headers, r.content.decode(r.encoding, errors='replace'), False)
+
+    def _InjectAudio(self, mpd, url):
+        """ Adds the Dolby Digital Plus audio of the unfiltered manifest to the web player manifest
+
+        The web player API only lists AAC stereo. The unfiltered manifest of the same title also holds the DD+ tracks,
+        encrypted with the same audio key the web license grants. Tracks encrypted with the video key are skipped, that
+        key can only be used by the CDM's video decoder.
+        """
+        import re
+        status_code, _, full = self._ForwardRequest('get', url, {}, None, use_auth=False)
+        if status_code != 200 or not full:
+            Log(f'[PS] No unfiltered manifest (HTTP {status_code}), AAC audio only', Log.DEBUG)
+            return mpd
+        period_re = re.compile(r'(<Period\b[^>]*>)(.*?)(</Period>)', re.DOTALL)
+        set_re = re.compile(r'<AdaptationSet\b.*?</AdaptationSet>', re.DOTALL)
+        kid_re = re.compile(r'default_KID="([^"]+)"', re.IGNORECASE)
+        web_periods, full_periods = list(period_re.finditer(mpd)), list(period_re.finditer(full))
+        if not web_periods or len(web_periods) != len(full_periods):
+            Log(f'[PS] Manifest periods differ ({len(web_periods)}/{len(full_periods)}), AAC audio only', Log.DEBUG)
+            return mpd
+        base = url.rsplit('/', 1)[0] + '/'
+        parts, last, added = [], 0, 0
+        for web, unfiltered in zip(web_periods, full_periods):
+            sets = set_re.findall(web.group(2))
+            audio_kids = {k.lower() for s in sets if 'contentType="audio"' in s for k in kid_re.findall(s)}
+            video_kids = {k.lower() for s in sets if 'contentType="video"' in s for k in kid_re.findall(s)}
+            extra = []
+            for s in set_re.findall(unfiltered.group(2)):
+                kids = {k.lower() for k in kid_re.findall(s)}
+                if 'contentType="audio"' not in s or 'ec-3' not in s or not kids or not kids <= audio_kids or kids & video_kids:
+                    continue
+                extra.append(re.sub(r'<BaseURL>(?![a-z]+://)', '<BaseURL>' + base, s))
+            parts += [mpd[last:web.start(3)], ''.join(extra)]
+            last = web.start(3)
+            added += len(extra)
+        parts.append(mpd[last:])
+        Log(f'[PS] Added {added} Dolby Digital Plus audio sets from the unfiltered manifest', Log.DEBUG)
+        return ''.join(parts)
 
     def _TranscodeSubtitle(self, endpoint, headers, data, filename):
         """ On-the-fly subtitle transcoding (TTMLv2 => SRT) """
