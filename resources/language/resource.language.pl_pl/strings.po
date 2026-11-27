@@ -1,6 +1,6 @@
 # XBMC Media Center language file
 # Addon Name: Amazon VOD
-# Addon id: plugin.video.amazon-test
+# Addon id: plugin.video.amazon.tv
 # Addon version: 0.2.6
 # Addon Provider: Sandmann79
 msgid ""

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <settings version="1">
-	<section id="plugin.video.amazon-test">
+	<section id="plugin.video.amazon.tv">
 		<category id="general" label="30011" help="">
 			<group id="home_window" label="30320">
 				<setting id="home_window_on_start" type="boolean" label="30321" help="">
@@ -10,7 +10,7 @@
 				</setting>
 				<setting id="home_window_open" type="action" label="30322" help="">
 					<level>0</level>
-					<data>RunScript(plugin.video.amazon-test,home)</data>
+					<data>RunScript(plugin.video.amazon.tv,home)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -22,7 +22,7 @@
 			<group id="purchases" label="30366">
 				<setting id="purchase_pin_set" type="action" label="30367" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=purchasePinSet)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=purchasePinSet)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -30,7 +30,7 @@
 				</setting>
 				<setting id="purchase_pin_remove" type="action" label="30368" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=purchasePinRemove)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=purchasePinRemove)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -40,7 +40,7 @@
 			<group id="parental" label="30396">
 				<setting id="parental_age" type="action" label="30397" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=parentalAge)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=parentalAge)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -48,7 +48,7 @@
 				</setting>
 				<setting id="parental_children" type="action" label="30398" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=parentalChildren)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=parentalChildren)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -336,7 +336,7 @@
 				</setting>
 				<setting id="is_settings" type="action" label="30013" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=openSettings&url=is)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=openSettings&url=is)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -564,7 +564,7 @@
 			<group id="2" label="30033">
 				<setting id="audio_langs" type="action" label="30285" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=langSettings&url=audio_langs)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=langSettings&url=audio_langs)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -584,7 +584,7 @@
 			<group id="3" label="30034">
 				<setting id="sub_langs" type="action" label="30286" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=langSettings&url=sub_langs)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=langSettings&url=sub_langs)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -624,7 +624,7 @@
 			<group id="4">
 				<setting id="pv_language" type="action" label="30025" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/pv/languageselect/)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/pv/languageselect/)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -683,7 +683,7 @@
 				</setting>
 				<setting id="login_mu" type="action" label="30130" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=LogIn)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=LogIn)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -698,7 +698,7 @@
 				</setting>
 				<setting id="remove_user" type="action" label="30131" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=removeUser)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=removeUser)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -713,7 +713,7 @@
 				</setting>
 				<setting id="login_su" type="action" label="30008" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=LogIn)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=LogIn)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -746,7 +746,7 @@
 				</setting>
 				<setting id="remove_cred" type="action" label="30007" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=remLoginData)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=remLoginData)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -761,7 +761,7 @@
 				</setting>
 				<setting id="remove_all_cred" type="action" label="30010" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=remLoginData)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=remLoginData)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -813,7 +813,7 @@
 				</setting>
 				<setting id="pv_clearcache" type="action" label="30087" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/pv/clearcache/)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/pv/clearcache/)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -879,7 +879,7 @@
 				</setting>
 				<setting id="reset_home" type="action" label="30095" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/pv/sethome/)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/pv/sethome/)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -1220,7 +1220,7 @@
 				</setting>
 				<setting id="customlibraryfolder" type="path" label="30062" help="" parent="enablelibraryfolder">
 					<level>0</level>
-					<default>special://profile/addon_data/plugin.video.amazon-test</default>
+					<default>special://profile/addon_data/plugin.video.amazon.tv</default>
 					<constraints>
 						<sources>
 							<source>auto</source>
@@ -1324,7 +1324,7 @@
 				</setting>
 				<setting id="create_zip" type="action" label="30275" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=createZIP)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=createZIP)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -1332,7 +1332,7 @@
 				</setting>
 				<setting id="rm_logs" type="action" label="30276" help="">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.amazon-test/?mode=removeLogs)</data>
+					<data>RunPlugin(plugin://plugin.video.amazon.tv/?mode=removeLogs)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>

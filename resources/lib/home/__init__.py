@@ -4,7 +4,7 @@ import xbmc
 
 
 def open_home_window():
-    """ Open the TV interface, run as script: RunScript(plugin.video.amazon-test,home) """
+    """ Open the TV interface, run as script: RunScript(plugin.video.amazon.tv,home) """
     from ..common import Globals
     from ..l10n import getString
     from ..users import loadUser, loadUsers, switchUser

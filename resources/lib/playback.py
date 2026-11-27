@@ -729,7 +729,7 @@ class _AmazonPlayer(xbmc.Player):
             playing = self.getPlayingFile()
         except RuntimeError:
             return False
-        return playing == self.path or playing.startswith('plugin://plugin.video.amazon')
+        return playing == self.path or playing.startswith('plugin://plugin.video.amazon.tv/')
 
     def onAVStarted(self):
         if self.isPlayingOwn():

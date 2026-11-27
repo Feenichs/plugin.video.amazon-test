@@ -427,7 +427,7 @@ def GrabJSON(url, postData=None):
                             body = body.get('props', body)
                             for p in ['atf', 'btf', 'landingPage', 'browse', 'search', 'categories', 'genre']:
                                 Merge(m, body.get(p, {}))
-                            for p in ['content', 'containers', 'pagination']:
+                            for p in ['content', 'containers', 'pagination', 'profiles', 'permissions']:
                                 Merge(m, {p: body.get(p, {})})
 
                 if _s.json_dump_raw:

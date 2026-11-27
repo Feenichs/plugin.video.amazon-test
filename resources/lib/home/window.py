@@ -59,7 +59,7 @@ CACHE_SECONDS = 300
 GRID_PAGE_TILES = 100
 TAB_SWITCH_DELAY = 0.35
 PLAYBACK_END_DELAY = 3
-WINDOW_PROPERTY = 'amazon_home_window'
+WINDOW_PROPERTY = 'plugin.video.amazon.tv-home_window'
 
 TAB_WATCHLIST = 'watchlist'
 TAB_FREE_WITH_ADS = 'freewithads'

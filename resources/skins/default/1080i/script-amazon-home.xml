@@ -7891,7 +7891,7 @@
             <align>center</align>
             <font>font13</font>
             <textcolor>FF8197A4</textcolor>
-            <label>$ADDON[plugin.video.amazon-test 30328]</label>
+            <label>$ADDON[plugin.video.amazon.tv 30328]</label>
             <visible>String.IsEqual(Window.Property(loading),true)</visible>
             <animation effect="fade" start="100" end="40" time="800" pulse="true" condition="true">Conditional</animation>
         </control>
@@ -7900,7 +7900,7 @@
             <align>center</align>
             <font>font14</font>
             <textcolor>FF8197A4</textcolor>
-            <label>$ADDON[plugin.video.amazon-test 30329]</label>
+            <label>$ADDON[plugin.video.amazon.tv 30329]</label>
             <visible>String.IsEqual(Window.Property(empty),true) + !String.IsEqual(Window.Property(loading),true)</visible>
         </control>
     </controls>

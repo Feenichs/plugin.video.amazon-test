@@ -1,4 +1,4 @@
-# Amazon VOD for Kodi – TV interface fork
+# Amazon VOD TV (plugin.video.amazon.tv) – TV interface fork of Amazon VOD for Kodi
 
 **Deutsch:** Dieser Fork des [Amazon-VOD-Addons](https://github.com/Sandmann79/xbmc) von Sandmann79 bringt
 eine Oberfläche wie die Prime-Video-App auf Fire TV, gemacht für die Fernbedienung:
@@ -40,13 +40,30 @@ staying at e.g. 720x360.
 
 ## Installation
 
+**Easiest, with automatic updates:** install the [Feenichs Add-ons repository](https://github.com/Feenichs/kodi-repository)
+(add the source `https://feenichs.github.io/kodi-repository/` in Kodi's file manager, install
+`repository.feenichs-….zip` from it via *Add-ons → Install from zip file*, with *Unknown sources* enabled), then install the add-on via
+*Install from repository → Feenichs Add-ons*.
+
+Or install a single zip:
+
 1. Download the ZIP from the [releases](../../releases) of this repository (do not unpack it).
 2. In Kodi: *Settings → System → Add-ons* → enable *Unknown sources*.
 3. *Add-ons → Install from zip file* → select the ZIP, then restart Kodi.
 
-An installed Amazon VOD add-on is replaced, login and settings are kept. The TV interface opens when the add-on is
-started; it can be disabled in the add-on settings (*General → TV interface*). Kodi may replace this version with an
-update of the original add-on; disable automatic updates for the add-on to keep it.
+The TV interface opens when the add-on is started; it can be disabled in the add-on settings (*General → TV
+interface*). The add-on needs the modules `script.module.amazoncaptcha`, `script.module.mechanicalsoup` and
+`script.module.pyautogui`, which are not in the official Kodi repository; they come from
+[Sandmann79's repository](https://github.com/Sandmann79/xbmc) (or the Feenichs add-on repository).
+
+**Since 2.0.0** the fork has its own add-on id `plugin.video.amazon.tv` (name "Amazon VOD TV"), so it no longer
+replaces the original `plugin.video.amazon-test` and both can be installed.
+
+**Coming from an older version of the fork (up to 1.2.4~tv27):** to keep login and settings, copy
+`userdata/addon_data/plugin.video.amazon-test` to `userdata/addon_data/plugin.video.amazon.tv` **before**
+installing. Then install, enable the add-on under *Add-ons → My add-ons* if needed, update keymaps or favourites that
+use the old id and uninstall the old add-on. Videos exported to the Kodi library link to the old id; export them
+again.
 
 ## Notes
 

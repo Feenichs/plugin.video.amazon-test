@@ -62,13 +62,13 @@ class BackgroundService(xbmc.Monitor):
         if cur_time >= (self.freqExport + self.lastExport):
             Log('Service: Exporting the Watchlist')
             self.lastExport = cur_time
-            xbmc.executebuiltin('RunPlugin(plugin://plugin.video.amazon-test/?mode=exportWatchlist)')
+            xbmc.executebuiltin('RunPlugin(plugin://plugin.video.amazon.tv/?mode=exportWatchlist)')
 
 
 class SettingsMonitor(xbmc.Monitor):
     def __init__(self):
         super(SettingsMonitor, self).__init__()
-        self.mon_prop = 'amazon_settingsmonitor_state'
+        self.mon_prop = 'plugin.video.amazon.tv-settingsmonitor_state'
         self.window = xbmcgui.Window(10000)
         self._abort = False
 
